@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Animated,
   StyleSheet,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import HeaderImage from './headerImage';
 import HeaderTitle from './headerTitle';
@@ -23,9 +24,82 @@ const scrollYHeader = (props) => {
     {id: 1, uri: require('../image/goteddy-bg.png')},
   ];
 
+  const menu = [
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+    {name: 'fish'},
+  ];
+
+  const items = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+    'ten ',
+    'eleven',
+    'twelve',
+    'thirteen',
+    'fourteen',
+    'fifteen',
+    'sixteen',
+    'seventeen',
+    'eighteen',
+    'nineteen',
+    'twenty ',
+    'twenty-one',
+    'twenty-two',
+    'twenty-three',
+    'twenty-four',
+    'twenty-five',
+    'twenty-six',
+    'twenty-seven',
+    'twenty-eight',
+    'twenty-nine',
+    'thirty',
+    'thirty-one',
+    'thirty-two',
+    'thirty-three',
+    'thirty-four',
+    'thirty-five',
+    'thirty-six',
+    'thirty-seven',
+    'thirty-eight',
+    'thirty-nine',
+    'forty',
+  ];
+
+  const [buttons, setButtons] = useState(0);
+  const arr = [];
+
   // * animated
   const scrollY = new Animated.Value(0);
-
+  const getValue = () =>
+    scrollY.addListener((data) =>
+      console.log('%c value:', 'color: green; font-size: 13px', data),
+    );
+  useEffect(() => {
+    getValue();
+  }, []);
+  // console.log('%c get Animated value:', 'color: green; font-size: 13px', value);
   return (
     <View style={{flex: 1}}>
       <HeaderImage Y={scrollY} />
@@ -40,20 +114,39 @@ const scrollYHeader = (props) => {
         onScroll={Animated.event([
           {nativeEvent: {contentOffset: {y: scrollY}}},
         ])}>
-        <View style={{top: 220, backgroundColor: 'green'}}>
-          <Text>
-            Open the Rendering tab and use the new Emulate vision deficiencies
-            feature to get a better idea of how people with different types of
-            vision deficiencies experience your site
-          </Text>
-        </View>
-        {image.map((value) => {
+        <ScrollView
+          horizontal={true}
+          style={{top: 220, backgroundColor: 'green', padding: 10}}>
+          {menu.map(({name}, index) => (
+            <TouchableOpacity
+              style={{backgroundColor: 'red', margin: 10, height: 30}}
+              key={index}>
+              <Text> {name}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        {items.map((value, i) => {
           return (
-            <View key={value.id} style={{height: 300, margin: 10, top: 250}}>
-              <Image
-                source={value.uri}
-                style={{flex: 1, width: null, height: null, borderRadius: 20}}
-              />
+            <View
+              key={i}
+              style={{
+                height: 10,
+                margin: 10,
+                top: 220,
+                backgroundColor: 'gray',
+                borderBottomColor: 'black',
+                borderBottomWidth: 1,
+              }}
+              onLayout={Animated.event([
+                {
+                  nativeEvent: {
+                    layout: {
+                      height: 230,
+                    },
+                  },
+                },
+              ])}>
+              <Text>{value}</Text>
             </View>
           );
         })}
