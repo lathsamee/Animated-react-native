@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {View, Animated} from 'react-native';
+import {ThemeUtils} from '../../utils';
 
 const HeaderTitle = ({Y, name}) => {
   // * header background color
@@ -41,6 +42,7 @@ const HeaderTitle = ({Y, name}) => {
           justifyContent: 'center',
           fontSize: 16,
           opacity: opacity,
+          fontSize: ThemeUtils.fontXLarge,
         }}>
         {name}
       </Animated.Text>

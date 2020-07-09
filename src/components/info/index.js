@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Animated, Text, View, Dimensions} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {ThemeUtils} from '../../utils';
 const Info = ({Y, name}) => {
-  const {width, height} = Dimensions.get('window');
   const opacity = Y.interpolate({
     inputRange: [0, 120],
     outputRange: [1, 0],
@@ -31,13 +31,6 @@ const Info = ({Y, name}) => {
     useNativeDriver: true,
   });
 
-  const widther = Y.interpolate({
-    inputRange: [0, 140],
-    outputRange: [width, 0],
-    extrapolate: 'clamp',
-    useNativeDriver: true,
-  });
-
   return (
     <Animated.View
       style={{
@@ -62,7 +55,11 @@ const Info = ({Y, name}) => {
         transform: [{translateY: grandY}],
       }}>
       <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-        <Animated.Text style={{transform: [{translateX: grandX}]}}>
+        <Animated.Text
+          style={{
+            transform: [{translateX: grandX}],
+            fontSize: ThemeUtils.fontLarge,
+          }}>
           {name}
         </Animated.Text>
         <Text>100+</Text>

@@ -6,6 +6,7 @@ import {
   ScrollView,
   Animated,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import HeaderImage from './headerImage';
 import HeaderTitle from './headerTitle';
