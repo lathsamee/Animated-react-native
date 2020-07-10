@@ -67,17 +67,11 @@ export default class App extends Component {
       dynamicIndex: 0,
       active: 0,
       scrollY: new Animated.Value(0),
-      grandY: [],
     };
   }
 
   downButtonHandler = (num) => {
     this.setState({active: num});
-    console.log(
-      '%c scrollsuuyy:',
-      'color: green; font-size: 13px',
-      this.arr[num],
-    );
     if (this.arr.length >= this.state.dynamicIndex) {
       // To Scroll to the index 5 element
       this.scrollview_ref.scrollTo({
@@ -91,7 +85,6 @@ export default class App extends Component {
   };
 
   render() {
-    console.log('this.arr[key]:', this.arr);
     return (
       <View style={styles.container}>
         <ScrollView
@@ -122,9 +115,12 @@ export default class App extends Component {
           onScroll={({nativeEvent}) => {
             // console.log('Event', nativeEvent.contentOffset.y);
             let grandY = nativeEvent.contentOffset.y;
-            console.log('%c arr:', 'color: green; font-size: 13px', this.arr);
-            // let hhh = this.arr.findIndex((data) => (data = grandY));
-            // console.log('hhh', hhh);
+            let grandYInt = parseInt(grandY);
+            let arrayInt = this.arr.map((data) => parseInt(data));
+            let hhh = arrayInt.findIndex((data) => data === grandYInt);
+            if (hhh !== -1) {
+              this.setState({active: hhh});
+            }
           }}>
           {/*Loop of JS which is like foreach loop*/}
           {this.items.map((item, key) => (
