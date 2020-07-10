@@ -11,6 +11,7 @@ import {
   Image,
   TextInput,
   Animated,
+  Button,
 } from 'react-native';
 //import all the components we needed
 export default class App extends Component {
@@ -60,23 +61,29 @@ export default class App extends Component {
       'thirty-nine',
       'forty',
     ];
-    //Blank array to store the location of each item
 
+    //Blank array to store the location of each item
     this.arr = [];
+    this.arrayX = [];
+
     this.state = {
       dynamicIndex: 0,
       active: 0,
-      scrollY: new Animated.Value(0),
     };
   }
 
   downButtonHandler = (num) => {
     this.setState({active: num});
     if (this.arr.length >= this.state.dynamicIndex) {
-      // To Scroll to the index 5 element
+      // for getNode https://github.com/facebook/react-native/pull/9944/commits/d99f2ab7d2495d621837561f1a621551d1467888
       this.scrollview_ref.scrollTo({
         x: 0,
         y: this.arr[num],
+        animated: true,
+      });
+      this.scrollview_X_ref.scrollTo({
+        x: this.arrayX[num],
+        y: 0,
         animated: true,
       });
     } else {
@@ -88,6 +95,9 @@ export default class App extends Component {
     return (
       <View style={styles.container}>
         <ScrollView
+          ref={(ref) => {
+            this.scrollview_X_ref = ref;
+          }}
           horizontal={true}
           style={{
             flexDirection: 'row',
@@ -99,6 +109,10 @@ export default class App extends Component {
               key={i}
               activeOpacity={0.5}
               onPress={() => this.downButtonHandler(i)}
+              onLayout={(event) => {
+                const layout = event.nativeEvent.layout.x;
+                this.arrayX[i] = layout;
+              }}
               style={
                 this.state.active == i
                   ? {padding: 15, backgroundColor: 'blue'}
@@ -113,29 +127,24 @@ export default class App extends Component {
             this.scrollview_ref = ref;
           }}
           onScroll={({nativeEvent}) => {
-            // console.log('Event', nativeEvent.contentOffset.y);
+            // console.log('Event', nativeEvent.contentOffset);
             let grandY = nativeEvent.contentOffset.y;
             let grandYInt = parseInt(grandY);
             let arrayInt = this.arr.map((data) => parseInt(data));
-            let hhh = arrayInt.findIndex((data) => data === grandYInt);
-            if (hhh !== -1) {
-              this.setState({active: hhh});
+            let numberOfCat = arrayInt.findIndex((data) => data === grandYInt);
+            if (numberOfCat !== -1) {
+              this.setState({active: numberOfCat});
+              this.downButtonHandler(numberOfCat);
             }
           }}>
           {/*Loop of JS which is like foreach loop*/}
           {this.items.map((item, key) => (
-            //key is the index of the array
-            //item is the single item of the array
             <View
               key={key}
               style={styles.item}
               onLayout={(event) => {
                 const layout = event.nativeEvent.layout;
                 this.arr[key] = layout.y;
-                // console.log('height:', layout.height);
-                // console.log('width:', layout.width);
-                // console.log('x:', layout.x);
-                // console.log('y:', layout.y);
               }}>
               <Text style={styles.text}>
                 {key}. {item}
