@@ -65,6 +65,7 @@ export default class App extends Component {
     //Blank array to store the location of each item
     this.arr = [];
     this.arrayX = [];
+    this.activeIndex = 0;
 
     this.state = {
       dynamicIndex: 0,
@@ -74,8 +75,8 @@ export default class App extends Component {
 
   downButtonHandler = (num) => {
     this.setState({active: num});
+    console.log('%c num:', 'color: green; font-size: 13px', num);
     if (this.arr.length >= this.state.dynamicIndex) {
-      // for getNode https://github.com/facebook/react-native/pull/9944/commits/d99f2ab7d2495d621837561f1a621551d1467888
       this.scrollview_ref.scrollTo({
         x: 0,
         y: this.arr[num],
@@ -104,38 +105,75 @@ export default class App extends Component {
             backgroundColor: '#1e73be',
             padding: 5,
           }}>
-          {this.items.map((value, i) => (
-            <TouchableOpacity
-              key={i}
-              activeOpacity={0.5}
-              onPress={() => this.downButtonHandler(i)}
-              onLayout={(event) => {
-                const layout = event.nativeEvent.layout.x;
-                this.arrayX[i] = layout;
-              }}
-              style={
-                this.state.active == i
-                  ? {padding: 15, backgroundColor: 'blue'}
-                  : {padding: 15, backgroundColor: '#f4801e'}
-              }>
-              <Text style={{color: '#fff'}}>{value}</Text>
-            </TouchableOpacity>
-          ))}
+          {this.items.map((value, i) => {
+            return (
+              <TouchableOpacity
+                key={i}
+                activeOpacity={0.5}
+                onPress={() => this.downButtonHandler(i)}
+                onLayout={(event) => {
+                  const layout = event.nativeEvent.layout.x;
+                  this.arrayX[i] = layout;
+                }}
+                style={
+                  this.state.active === i
+                    ? {padding: 15, backgroundColor: 'blue'}
+                    : {padding: 15, backgroundColor: '#f4801e'}
+                }>
+                <Text style={{color: '#fff'}}>{value}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
         <ScrollView
           ref={(ref) => {
             this.scrollview_ref = ref;
           }}
           onScroll={({nativeEvent}) => {
-            // console.log('Event', nativeEvent.contentOffset);
+            // console.log('Event', nativeEvent.)contentOffset;
+
             let grandY = nativeEvent.contentOffset.y;
             let grandYInt = parseInt(grandY);
             let arrayInt = this.arr.map((data) => parseInt(data));
-            let numberOfCat = arrayInt.findIndex((data) => data === grandYInt);
-            if (numberOfCat !== -1) {
-              this.setState({active: numberOfCat});
-              this.downButtonHandler(numberOfCat);
+
+            let number = arrayInt.findIndex((data) => data >= grandYInt);
+            console.log(
+              '%c grandYInt:',
+              'color: green; font-size: 13px',
+              grandYInt,
+            );
+            // this.activeIndex =
+            //   this.activeIndex !== number ? number : this.activeIndex;
+
+            if (grandYInt >= 0) {
+              if (this.activeIndex !== number - 1) {
+                this.activeIndex = number - 1;
+                this.setState({active: number - 1});
+                // this.downButtonHandler(number - 1);
+                console.log(
+                  '%c this.activeIndex:',
+                  'color: green; font-size: 13px',
+                  this.activeIndex,
+                );
+              } else if (number - 1 <= 0) {
+                this.activeIndex = 0;
+                this.setState({active: 0});
+                console.log(
+                  '%c this.activeIndex:',
+                  'color: red; font-size: 13px',
+                  this.activeIndex,
+                );
+              }
+            } else {
+              this.activeIndex = 0;
             }
+
+            // let numberOfCat = arrayInt.findIndex((data) => data === grandYInt);
+
+            // if (numberOfCat !== -1) {
+            //   this.setState({active: numberOfCat});
+            //   this.downButtonHandler(numberOfCat);
+            // }
           }}>
           {/*Loop of JS which is like foreach loop*/}
           {this.items.map((item, key) => (
