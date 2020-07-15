@@ -20,47 +20,176 @@ export default class App extends Component {
     super();
     //Array of Item to add in Scrollview
     this.items = [
-      'zero',
-      'one',
-      'two',
-      'three',
-      'four',
-      'five',
-      'six',
-      'seven',
-      'eight',
-      'nine',
-      'ten ',
-      'eleven',
-      'twelve',
-      'thirteen',
-      'fourteen',
-      'fifteen',
-      'sixteen',
-      'seventeen',
-      'eighteen',
-      'nineteen',
-      'twenty ',
-      'twenty-one',
-      'twenty-two',
-      'twenty-three',
-      'twenty-four',
-      'twenty-five',
-      'twenty-six',
-      'twenty-seven',
-      'twenty-eight',
-      'twenty-nine',
-      'thirty',
-      'thirty-one',
-      'thirty-two',
-      'thirty-three',
-      'thirty-four',
-      'thirty-five',
-      'thirty-six',
-      'thirty-seven',
-      'thirty-eight',
-      'thirty-nine',
-      'forty',
+      {
+        title: 'rice',
+        content: [
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 20000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+        ],
+      },
+      {
+        title: 'soup',
+        content: [
+          {
+            pd_name: 'soup rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 40000,
+          },
+          {
+            pd_name: 'soup chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+        ],
+      },
+      {
+        title: 'Tom yum',
+        content: [
+          {
+            pd_name: 'soup rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 40000,
+          },
+          {
+            pd_name: 'soup chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+        ],
+      },
+      {
+        title: 'pok pok',
+        content: [
+          {
+            pd_name: 'soup rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 40000,
+          },
+          {
+            pd_name: 'soup chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+          {
+            pd_name: 'chicken rice',
+            pd_detail:
+              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+            pd_price: 10000,
+          },
+        ],
+      },
     ];
 
     //Blank array to store the location of each item
@@ -84,7 +213,6 @@ export default class App extends Component {
   }
 
   downButtonHandler(num) {
-    this._isMounted && this.setState({active: num, buttonClick: false});
     this.scrollview_ref.scrollTo({
       x: 0,
       y: this.arr[num],
@@ -95,6 +223,13 @@ export default class App extends Component {
       y: 0,
       animated: true,
     });
+    this._isMounted &&
+      this.setState({active: num}, () =>
+        setTimeout(() => {
+          this.setState({buttonClick: false});
+          this.activeIndex = num;
+        }, 100),
+      );
   }
 
   render() {
@@ -110,14 +245,17 @@ export default class App extends Component {
             backgroundColor: '#1e73be',
             padding: 5,
           }}>
-          {this.items.map((value, i) => {
+          {this.items.map(({title}, i) => {
             return (
               <TouchableOpacity
                 key={i}
                 activeOpacity={0.5}
                 onPress={async () => {
-                  (await this._isMounted) && this.setState({buttonClick: true});
-                  await this.downButtonHandler(i);
+                  if ((this.activeIndex === i) !== true) {
+                    this._isMounted &&
+                      (await this.setState({buttonClick: true}));
+                    await this.downButtonHandler(i);
+                  }
                 }}
                 onLayout={(event) => {
                   const layout = event.nativeEvent.layout.x;
@@ -128,7 +266,7 @@ export default class App extends Component {
                     ? {padding: 15, backgroundColor: 'blue'}
                     : {padding: 15, backgroundColor: '#f4801e'}
                 }>
-                <Text style={{color: '#fff'}}>{value}</Text>
+                <Text style={{color: '#fff'}}>{title}</Text>
               </TouchableOpacity>
             );
           })}
@@ -141,8 +279,8 @@ export default class App extends Component {
             let grandY = nativeEvent.contentOffset.y;
             let grandYInt = parseInt(grandY);
             let arrayInt = this.arr.map((data) => parseInt(data));
-
             let number = arrayInt.findIndex((data) => data >= grandYInt);
+
             if (this.state.buttonClick === false) {
               if (grandYInt !== 0) {
                 if (this.activeIndex !== number - 1) {
@@ -170,8 +308,7 @@ export default class App extends Component {
               }
             }
           }}>
-          {/*Loop of JS which is like foreach loop*/}
-          {this.items.map((item, key) => (
+          {this.items.map(({title, content}, key) => (
             <View
               key={key}
               style={styles.item}
@@ -180,9 +317,20 @@ export default class App extends Component {
                 this.arr[key] = layout.y;
               }}>
               <Text style={styles.text}>
-                {key}. {item}
+                {key}. {title}
               </Text>
               <View style={styles.separator} />
+              <View>
+                {content.map(({pd_name, pd_price, pd_detail}, i) => {
+                  return (
+                    <View key={i} style={{padding: 10}}>
+                      <Text>{pd_name}</Text>
+                      <Text>{pd_price}</Text>
+                      <Text>{pd_detail}</Text>
+                    </View>
+                  );
+                })}
+              </View>
             </View>
           ))}
         </ScrollView>
