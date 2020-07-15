@@ -13,6 +13,7 @@ import {
   TextInput,
   Animated,
   Button,
+  TouchableWithoutFeedback,
 } from 'react-native';
 //import all the components we needed
 export default class App extends Component {
@@ -509,11 +510,11 @@ export default class App extends Component {
       y: 0,
       animated: true,
     });
+    this.activeIndex = num;
     this._isMounted &&
       this.setState({active: num}, () =>
         setTimeout(() => {
           this.setState({buttonClick: false});
-          this.activeIndex = num;
         }, 100),
       );
   }
@@ -532,7 +533,6 @@ export default class App extends Component {
       inputRange: [0, 200],
       outputRange: ['rgba(255,255,255,0.0)', '#2fd1c9'],
       extrapolate: 'clamp',
-      // useNativeDriver: false,
     });
   };
   opacityTitle = () => {
@@ -540,6 +540,38 @@ export default class App extends Component {
     return scrollY.interpolate({
       inputRange: [0, 100, 200],
       outputRange: [0, 0.1, 50],
+      extrapolate: 'clamp',
+    });
+  };
+  opacityInfo = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [1, 0],
+      extrapolate: 'clamp',
+    });
+  };
+  topInfo = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 120],
+      outputRange: [120, 0],
+      extrapolate: 'clamp',
+    });
+  };
+  grandYInfo = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 140],
+      outputRange: [10, 0],
+      extrapolate: 'clamp',
+    });
+  };
+  grandXInfo = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 160],
+      outputRange: [0, 140],
       extrapolate: 'clamp',
     });
   };
@@ -559,6 +591,7 @@ export default class App extends Component {
       if (grandYInt !== 0) {
         if (this.activeIndex !== number - 1) {
           if (number - 1 !== -1) {
+            console.log('%c redred:', 'color: green; font-size: 13px');
             this.activeIndex = number - 1;
             this._isMounted &&
               this.setState({
@@ -572,6 +605,7 @@ export default class App extends Component {
           }
         }
       } else {
+        console.log('%c greenreddn:', 'color: green; font-size: 13px');
         this.activeIndex = number;
         this._isMounted && this.setState({active: this.activeIndex});
         this.scrollview_X_ref.scrollTo({
@@ -586,15 +620,19 @@ export default class App extends Component {
   render() {
     // console.log(
     //   'See it',
-    // this.state.buttonClick,
-    // this.activeIndex,
-    // this.state.active,
+    //   this.state.buttonClick,
+    //   this.activeIndex,
+    //   this.state.active,
     // );
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
     const opacityTitle = this.opacityTitle();
+    const opacityInfo = this.opacityInfo();
+    const topInfo = this.topInfo();
+    const grandYInfo = this.grandYInfo();
+    const grandXInfo = this.grandXInfo();
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, {backgroundColor: 'red'}]}>
         <Animated.Image
           style={{
             height: 200,
@@ -635,7 +673,51 @@ export default class App extends Component {
           </Animated.Text>
         </Animated.View>
 
+        {/* <Animated.View
+          style={{
+            position: 'absolute',
+            opacity: opacityInfo,
+            top: topInfo,
+            zIndex: 100,
+            borderRadius: 20,
+            height: 120,
+            width: '90%',
+            backgroundColor: 'white',
+            alignSelf: 'center',
+            padding: 20,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.22,
+            shadowRadius: 2.22,
+            elevation: 3,
+            transform: [{translateY: grandYInfo}],
+          }}>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Animated.Text
+              style={{
+                transform: [{translateX: grandXInfo}],
+                // fontSize: ThemeUtils.fontLarge,
+              }}>
+              Ka Kar
+            </Animated.Text>
+            <Text>100+</Text>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text>ເຂົ້າປຽກ, ຕຳປູ, ຕຳປາ</Text>
+            <Text>20-25min</Text>
+          </View>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <FontAwesome5 name={'facebook'} />
+            <Text>Promotion</Text>
+          </View>
+        </Animated.View> */}
+
         <Animated.ScrollView
+          // nestedScrollEnabled={true}
+          // overScrollMode={'never'}
           stickyHeaderIndices={[0]}
           ref={(ref) => {
             this.scrollview_ref = ref;
@@ -653,11 +735,13 @@ export default class App extends Component {
             ref={(ref) => {
               this.scrollview_X_ref = ref;
             }}
+            // nestedScrollEnabled={true}
             horizontal={true}
             style={{
               flexDirection: 'row',
               backgroundColor: '#1e73be',
               padding: 5,
+              top: 200,
             }}>
             {this.items.map(({title}, i) => {
               return (
@@ -670,15 +754,21 @@ export default class App extends Component {
                       this.downButtonHandler(i);
                     }
                   }}
+                  style={
+                    this.state.active === i
+                      ? {
+                          padding: 15,
+                          backgroundColor: 'blue',
+                        }
+                      : {
+                          padding: 15,
+                          backgroundColor: '#f4801e',
+                        }
+                  }
                   onLayout={(event) => {
                     const layout = event.nativeEvent.layout.x;
                     this.arrayX[i] = layout;
-                  }}
-                  style={
-                    this.state.active === i
-                      ? {padding: 15, backgroundColor: 'blue'}
-                      : {padding: 15, backgroundColor: '#f4801e'}
-                  }>
+                  }}>
                   <Text style={{color: '#fff'}}>{title}</Text>
                 </TouchableOpacity>
               );
@@ -688,7 +778,7 @@ export default class App extends Component {
           {this.items.map(({title, content}, key) => (
             <View
               key={key}
-              style={styles.item}
+              style={{top: 220}}
               onLayout={(event) => {
                 const layout = event.nativeEvent.layout;
                 this.arr[key] = layout.y;
