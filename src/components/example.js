@@ -526,9 +526,25 @@ export default class App extends Component {
       extrapolate: 'clamp',
     });
   };
+  backgrounded = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 200],
+      outputRange: ['rgba(255,255,255,0.0)', '#2fd1c9'],
+      extrapolate: 'clamp',
+      // useNativeDriver: false,
+    });
+  };
+  opacityTitle = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 100, 200],
+      outputRange: [0, 0.1, 50],
+      extrapolate: 'clamp',
+    });
+  };
 
   handleScroll = (event) => {
-    //custom actions
     // console.log(
     //   '%c event:',
     //   'color: green; font-size: 13px',
@@ -575,6 +591,8 @@ export default class App extends Component {
     // this.state.active,
     // );
     const opacityImage = this.opacity();
+    const backgroundTitle = this.backgrounded();
+    const opacityTitle = this.opacityTitle();
     return (
       <View style={styles.container}>
         <Animated.Image
@@ -589,6 +607,34 @@ export default class App extends Component {
           source={this.headerImage}
         />
 
+        <Animated.View
+          style={{
+            height: 70,
+            backgroundColor: backgroundTitle,
+            width: '100%',
+            alignItem: 'center',
+            justifyContent: 'center',
+            zIndex: 200,
+            elevation: 200,
+          }}>
+          <View style={{position: 'absolute', left: 7}}>
+            <FontAwesome5 name={'angle-left'} brand size={30} />
+          </View>
+          <View style={{position: 'absolute', right: 7}}>
+            <FontAwesome5 name={'calendar-plus'} brand size={30} />
+          </View>
+          <Animated.Text
+            style={{
+              textAlign: 'center',
+              justifyContent: 'center',
+              fontSize: 16,
+              opacity: opacityTitle,
+              // fontSize: ThemeUtils.fontXLarge,
+            }}>
+            Ka Kar
+          </Animated.Text>
+        </Animated.View>
+
         <Animated.ScrollView
           stickyHeaderIndices={[0]}
           ref={(ref) => {
@@ -597,54 +643,12 @@ export default class App extends Component {
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
             {
-              useNativeDriver: true,
+              useNativeDriver: false,
               listener: (event) => {
                 this.handleScroll(event);
-                // const offsetY = event.nativeEvent.contentOffset.y;
-                // console.log(
-                //   '%c offsetY:',
-                //   'color: green; font-size: 13px',
-                //   offsetY,
-                // );
-                // do something special
               },
             },
-          )}
-          // onScroll={({nativeEvent}) => {
-          //   this.setState({scrollY: nativeEvent.contentOffset.y});
-          //   let grandY = nativeEvent.contentOffset.y;
-          //   let grandYInt = parseInt(grandY);
-          //   let arrayInt = this.arr.map((data) => parseInt(data));
-          //   let number = arrayInt.findIndex((data) => data >= grandYInt);
-
-          //   if (this.state.buttonClick === false) {
-          //     if (grandYInt !== 0) {
-          //       if (this.activeIndex !== number - 1) {
-          //         if (number - 1 !== -1) {
-          //           this.activeIndex = number - 1;
-          //           this._isMounted &&
-          //             this.setState({
-          //               active: this.activeIndex,
-          //             });
-          //           this.scrollview_X_ref.scrollTo({
-          //             x: this.arrayX[this.activeIndex],
-          //             y: 0,
-          //             animated: true,
-          //           });
-          //         }
-          //       }
-          //     } else {
-          //       this.activeIndex = number;
-          //       this._isMounted && this.setState({active: this.activeIndex});
-          //       this.scrollview_X_ref.scrollTo({
-          //         x: this.arrayX[this.activeIndex],
-          //         y: 0,
-          //         animated: true,
-          //       });
-          //     }
-          //   }
-          // }}
-        >
+          )}>
           <ScrollView
             ref={(ref) => {
               this.scrollview_X_ref = ref;
