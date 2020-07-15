@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 //import all the components we needed
 export default class App extends Component {
+  _isMounted = false;
   constructor() {
     super();
     //Array of Item to add in Scrollview
@@ -68,29 +69,42 @@ export default class App extends Component {
     this.activeIndex = 0;
 
     this.state = {
-      dynamicIndex: 0,
+      dynamicY: 0,
       active: 0,
+      tabNumber: 0,
     };
   }
 
-  downButtonHandler = (num) => {
-    this.setState({active: num});
+  componentDidMount() {
+    this._isMounted = true;
+  }
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  downButtonHandler(num) {
+    this._isMounted && this.setState({active: num});
+    this.activeIndex = num;
     console.log('%c num:', 'color: green; font-size: 13px', num);
-    if (this.arr.length >= this.state.dynamicIndex) {
-      this.scrollview_ref.scrollTo({
-        x: 0,
-        y: this.arr[num],
-        animated: true,
-      });
-      this.scrollview_X_ref.scrollTo({
-        x: this.arrayX[num],
-        y: 0,
-        animated: true,
-      });
-    } else {
-      alert('Out of Max Index');
-    }
-  };
+    console.log(
+      '%c active:',
+      'color: green; font-size: 13px',
+      this.activeIndex,
+    );
+    // if (this.activeIndex >= this.state.dynamicY) {
+
+    this.scrollview_ref.scrollTo({
+      x: 0,
+      y: this.arr[num],
+      animated: true,
+    });
+    this.scrollview_X_ref.scrollTo({
+      x: this.arrayX[num],
+      y: 0,
+      animated: true,
+    });
+    // }
+  }
 
   render() {
     return (
@@ -110,7 +124,7 @@ export default class App extends Component {
               <TouchableOpacity
                 key={i}
                 activeOpacity={0.5}
-                onPress={() => this.downButtonHandler(i)}
+                onPress={async () => await this.downButtonHandler(i)}
                 onLayout={(event) => {
                   const layout = event.nativeEvent.layout.x;
                   this.arrayX[i] = layout;
@@ -130,50 +144,32 @@ export default class App extends Component {
             this.scrollview_ref = ref;
           }}
           onScroll={({nativeEvent}) => {
-            // console.log('Event', nativeEvent.)contentOffset;
-
             let grandY = nativeEvent.contentOffset.y;
             let grandYInt = parseInt(grandY);
             let arrayInt = this.arr.map((data) => parseInt(data));
 
             let number = arrayInt.findIndex((data) => data >= grandYInt);
-            console.log(
-              '%c grandYInt:',
-              'color: green; font-size: 13px',
-              grandYInt,
-            );
-            // this.activeIndex =
-            //   this.activeIndex !== number ? number : this.activeIndex;
-
-            if (grandYInt >= 0) {
+            if (grandYInt !== 0) {
               if (this.activeIndex !== number - 1) {
-                this.activeIndex = number - 1;
-                this.setState({active: number - 1});
-                // this.downButtonHandler(number - 1);
-                console.log(
-                  '%c this.activeIndex:',
-                  'color: green; font-size: 13px',
-                  this.activeIndex,
-                );
-              } else if (number - 1 <= 0) {
-                this.activeIndex = 0;
-                this.setState({active: 0});
-                console.log(
-                  '%c this.activeIndex:',
-                  'color: red; font-size: 13px',
-                  this.activeIndex,
-                );
+                if (number - 1 !== -1) {
+                  this.activeIndex = number - 1;
+                  this._isMounted && this.setState({active: this.activeIndex});
+                  this.scrollview_X_ref.scrollTo({
+                    x: this.arrayX[this.activeIndex],
+                    y: 0,
+                    animated: true,
+                  });
+                }
               }
             } else {
-              this.activeIndex = 0;
+              this.activeIndex = number;
+              this._isMounted && this.setState({active: this.activeIndex});
+              this.scrollview_X_ref.scrollTo({
+                x: this.arrayX[this.activeIndex],
+                y: 0,
+                animated: true,
+              });
             }
-
-            // let numberOfCat = arrayInt.findIndex((data) => data === grandYInt);
-
-            // if (numberOfCat !== -1) {
-            //   this.setState({active: numberOfCat});
-            //   this.downButtonHandler(numberOfCat);
-            // }
           }}>
           {/*Loop of JS which is like foreach loop*/}
           {this.items.map((item, key) => (
