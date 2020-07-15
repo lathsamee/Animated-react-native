@@ -72,6 +72,7 @@ export default class App extends Component {
       dynamicY: 0,
       active: 0,
       tabNumber: 0,
+      buttonClick: false,
     };
   }
 
@@ -83,16 +84,7 @@ export default class App extends Component {
   }
 
   downButtonHandler(num) {
-    this._isMounted && this.setState({active: num});
-    this.activeIndex = num;
-    console.log('%c num:', 'color: green; font-size: 13px', num);
-    console.log(
-      '%c active:',
-      'color: green; font-size: 13px',
-      this.activeIndex,
-    );
-    // if (this.activeIndex >= this.state.dynamicY) {
-
+    this._isMounted && this.setState({active: num, buttonClick: false});
     this.scrollview_ref.scrollTo({
       x: 0,
       y: this.arr[num],
@@ -103,7 +95,6 @@ export default class App extends Component {
       y: 0,
       animated: true,
     });
-    // }
   }
 
   render() {
@@ -124,7 +115,10 @@ export default class App extends Component {
               <TouchableOpacity
                 key={i}
                 activeOpacity={0.5}
-                onPress={async () => await this.downButtonHandler(i)}
+                onPress={async () => {
+                  (await this._isMounted) && this.setState({buttonClick: true});
+                  await this.downButtonHandler(i);
+                }}
                 onLayout={(event) => {
                   const layout = event.nativeEvent.layout.x;
                   this.arrayX[i] = layout;
@@ -149,26 +143,31 @@ export default class App extends Component {
             let arrayInt = this.arr.map((data) => parseInt(data));
 
             let number = arrayInt.findIndex((data) => data >= grandYInt);
-            if (grandYInt !== 0) {
-              if (this.activeIndex !== number - 1) {
-                if (number - 1 !== -1) {
-                  this.activeIndex = number - 1;
-                  this._isMounted && this.setState({active: this.activeIndex});
-                  this.scrollview_X_ref.scrollTo({
-                    x: this.arrayX[this.activeIndex],
-                    y: 0,
-                    animated: true,
-                  });
+            if (this.state.buttonClick === false) {
+              if (grandYInt !== 0) {
+                if (this.activeIndex !== number - 1) {
+                  if (number - 1 !== -1) {
+                    this.activeIndex = number - 1;
+                    this._isMounted &&
+                      this.setState({
+                        active: this.activeIndex,
+                      });
+                    this.scrollview_X_ref.scrollTo({
+                      x: this.arrayX[this.activeIndex],
+                      y: 0,
+                      animated: true,
+                    });
+                  }
                 }
+              } else {
+                this.activeIndex = number;
+                this._isMounted && this.setState({active: this.activeIndex});
+                this.scrollview_X_ref.scrollTo({
+                  x: this.arrayX[this.activeIndex],
+                  y: 0,
+                  animated: true,
+                });
               }
-            } else {
-              this.activeIndex = number;
-              this._isMounted && this.setState({active: this.activeIndex});
-              this.scrollview_X_ref.scrollTo({
-                x: this.arrayX[this.activeIndex],
-                y: 0,
-                animated: true,
-              });
             }
           }}>
           {/*Loop of JS which is like foreach loop*/}
