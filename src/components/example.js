@@ -536,7 +536,7 @@ export default class App extends Component {
     const {scrollY} = this.state;
     return scrollY.interpolate({
       inputRange: [0, 200],
-      outputRange: ['rgba(255,255,255,0.0)', '#2fd1c9'],
+      outputRange: ['rgba(255,255,255,0)', 'rgba(47, 209, 201, 1.0)'],
       extrapolate: 'clamp',
     });
   };
@@ -719,16 +719,14 @@ export default class App extends Component {
           <TouchableOpacity
             style={{
               position: 'absolute',
-              // zIndex: zIndexHeader,
-              // elevation: zIndexHeader,
-              zIndex: 1000,
-              elevation: 1000,
+              zIndex: 90,
+              elevation: 90,
               width: Theme.relativeWidth(9),
               height: Theme.relativeWidth(9),
               justifyContent: 'center',
               alignItems: 'center',
               left: Theme.relativeWidth(2),
-              backgroundColor: '#2fd1c9',
+              backgroundColor: 'rgba(47, 209, 201, 1.0)',
               paddingHorizontal: 7,
               borderRadius: Theme.APPBAR_HEIGHT,
             }}
@@ -738,8 +736,8 @@ export default class App extends Component {
           <TouchableOpacity
             style={{
               position: 'absolute',
-              zIndex: 1000,
-              elevation: 1000,
+              zIndex: 90,
+              elevation: 90,
               width: Theme.relativeWidth(9),
               height: Theme.relativeWidth(9),
               justifyContent: 'center',
@@ -773,18 +771,19 @@ export default class App extends Component {
             position: 'absolute',
             opacity: opacityInfo,
             top: topInfo,
-            zIndex: 1200,
-            elevation: 1200,
+            zIndex: 100,
+            elevation: 100,
+            borderColor: '#707070',
             borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
             height: Theme.relativeHeight(17),
             width: widthInfo,
             backgroundColor: 'white',
             alignSelf: 'center',
             padding: 20,
-            shadowColor: '#000',
+            shadowColor: '#000000',
             shadowOffset: {
               width: 0,
-              height: 1,
+              height: 2,
             },
             shadowOpacity: 0.22,
             shadowRadius: 2.22,
@@ -876,7 +875,7 @@ export default class App extends Component {
         <Animated.View
           style={{
             flexDirection: 'row',
-            backgroundColor: 'red',
+            backgroundColor: '#2FD1C9',
             paddingLeft: 15,
             paddingTop: 8,
             paddingBottom: 8,
@@ -884,10 +883,18 @@ export default class App extends Component {
             alignSelf: 'center',
             width: Theme.relativeWidth(93),
             borderRadius: (Theme.APPBAR_HEIGHT - 35) / 2,
+            borderColor: '#C2C2C2',
             top: topSpacialBar,
             marginTop: marginTopAni,
+            shadowColor: '#000000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.22,
+            shadowRadius: 2.22,
           }}>
-          <Text>
+          <Text style={{color: '#ffffff'}}>
             ເຂົ້າຈີ່ທີ່ມີຫຼາຍກວ່າເຂົ້າຈີ່ຫຼາກຫາຍລົດຊາດ ພ້ອມຊຸບອຸ່ນໆ
             ບໍ່ວາຈະເປັນຊຸບ ໝາກອຶ ຊຸບຄຣີມສາລີ ຊຸບຜັກໂຫມ ທີ່ເປັນໄດ້ທັງອາຫານເຊົ້າ
             ຫຼື ອາຫານວ່າງພ້ອມ ເຄື່ອງດື່ມ ກາເຟ ແລະ ເຂົ້າໜົມ.
@@ -896,18 +903,27 @@ export default class App extends Component {
 
         <Animated.View
           style={{
-            // flexDirection: 'row',
             top: topSpacialBar,
             marginBottom: 8,
             marginTop: 10,
             left: Theme.relativeWidth(3),
           }}>
-          <Text>Promotion</Text>
+          <Text
+            style={{
+              marginTop: 10,
+              marginBottom: 15,
+              color: '#F1902F',
+              fontWeight: 'bold',
+              fontSize: Theme.fontLarge,
+            }}>
+            Promotion
+          </Text>
+
           <ScrollView
             horizontal={true}
             style={{
-              zIndex: 1400,
-              elevation: 1400,
+              zIndex: 10,
+              elevation: 10,
             }}>
             <View
               style={{
@@ -946,11 +962,18 @@ export default class App extends Component {
             }),
             left: Theme.relativeWidth(3),
           }}>
-          <Text>Category</Text>
+          <Text
+            style={{
+              marginTop: 10,
+              color: '#2FD1C9',
+              fontSize: Theme.fontLarge,
+              fontWeight: 'bold',
+            }}>
+            Category
+          </Text>
         </Animated.View>
 
         <Animated.ScrollView
-          // nestedScrollEnabled={true}
           scrollEventThrottle={16}
           overScrollMode={'never'}
           removeClippedSubviews={false}
@@ -959,8 +982,8 @@ export default class App extends Component {
             this.scrollview_ref = ref;
           }}
           style={{
-            zIndex: 1500,
-            elevation: 1500,
+            zIndex: 150,
+            elevation: 150,
           }}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
@@ -1003,7 +1026,7 @@ export default class App extends Component {
                       marginLeft: 0,
                       marginRight: 10,
                       paddingVertical: 5,
-                      paddingHorizontal: 20,
+                      paddingHorizontal: 30,
                       borderRadius: 30,
                     },
                     this.activeIndex === i
@@ -1019,11 +1042,12 @@ export default class App extends Component {
                         },
                   ]}>
                   <Text
-                    style={
+                    style={[
+                      {fontSize: Theme.fontNormal, fontWeight: 'bold'},
                       this.state.active === i
                         ? {color: '#F4801E'}
-                        : {color: '#E9E9E9'}
-                    }>
+                        : {color: '#C4CCCE'},
+                    ]}>
                     {title}
                   </Text>
                 </TouchableOpacity>
