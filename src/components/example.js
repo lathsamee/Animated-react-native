@@ -17,6 +17,7 @@ import {
   Platform,
 } from 'react-native';
 import {Theme} from '../utils';
+import {vec} from 'react-native-redash';
 //import all the components we needed
 export default class App extends Component {
   _isMounted = false;
@@ -484,12 +485,14 @@ export default class App extends Component {
     this.arr = [];
     this.arrayX = [];
     this.activeIndex = 0;
+    // this.arraySticky = [0, 1, 2];
 
     this.state = {
       dynamicY: 0,
       active: 0,
       tabNumber: 0,
       buttonClick: false,
+      isScroll: false,
       scrollY: new Animated.Value(0),
     };
   }
@@ -517,7 +520,7 @@ export default class App extends Component {
       this.setState({active: num}, () =>
         setTimeout(() => {
           this.setState({buttonClick: false});
-        }, 100),
+        }, 1000),
       );
   }
 
@@ -561,13 +564,13 @@ export default class App extends Component {
       extrapolate: 'clamp',
     });
   };
-  topScrollView = () => {
+  topSpacialBar = () => {
     const {scrollY} = this.state;
     return scrollY.interpolate({
-      inputRange: [0, 140],
-      outputRange: [Theme.relativeHeight(20), Platform.OS === 'ios' ? 8 : 10],
+      inputRange: [1, 250],
+      outputRange: [Theme.relativeHeight(33), Platform.OS === 'ios' ? 8 : 1],
       extrapolate: 'clamp',
-      useNativeDriver: true,
+      // useNativeDriver: true,
     });
   };
   grandYInfo = () => {
@@ -582,7 +585,35 @@ export default class App extends Component {
     const {scrollY} = this.state;
     return scrollY.interpolate({
       inputRange: [0, 160],
-      outputRange: [0, 140],
+      outputRange: [0, 100],
+      extrapolate: 'clamp',
+    });
+  };
+  zIndexHeader = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 200],
+      outputRange: [200, 0],
+      extrapolate: 'clamp',
+    });
+  };
+  widthInfo = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 140, 180],
+      outputRange: [
+        Theme.relativeWidth(93),
+        Theme.relativeWidth(73),
+        Theme.relativeWidth(53),
+      ],
+      extrapolate: 'clamp',
+    });
+  };
+  marginTopAni = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 140, 180],
+      outputRange: [4, 8, 10],
       extrapolate: 'clamp',
     });
   };
@@ -597,6 +628,7 @@ export default class App extends Component {
     let grandYInt = parseInt(grandY);
     let arrayInt = this.arr.map((data) => parseInt(data));
     let number = arrayInt.findIndex((data) => data >= grandYInt);
+    let numberMinusOne = number - 1;
 
     if (this.state.buttonClick === false) {
       if (grandYInt !== 0) {
@@ -605,20 +637,20 @@ export default class App extends Component {
           'color: green; font-size: 13px',
           grandYInt !== 0,
         );
-        if (this.activeIndex !== number - 1) {
-          console.log(
-            '%c this.activeIndex !== number - 1:',
-            'color: green; font-size: 13px',
-            this.activeIndex !== number - 1,
-          );
-          if (number - 1 !== -1) {
-            console.log(
-              '%c number - 1 !== -1:',
-              'color: green; font-size: 13px',
-              number - 1 !== -1,
-            );
-            console.log('%c redred:', 'color: green; font-size: 13px');
-            this.activeIndex = number - 1;
+        if (this.activeIndex !== numberMinusOne) {
+          // console.log(
+          //   '%c this.activeIndex !== number - 1:',
+          //   'color: green; font-size: 13px',
+          //   this.activeIndex !== number - 1,
+          // );
+          if (numberMinusOne !== -1) {
+            // console.log(
+            //   '%c number - 1 !== -1:',
+            //   'color: green; font-size: 13px',
+            //   number - 1 !== -1,
+            // );
+            // console.log('%c redred:', 'color: green; font-size: 13px');
+            this.activeIndex = number;
             this._isMounted &&
               this.setState({
                 active: this.activeIndex,
@@ -631,7 +663,7 @@ export default class App extends Component {
           }
         }
       } else {
-        console.log('%c greenreddn:', 'color: green; font-size: 13px');
+        // console.log('%c greenreddn:', 'color: green; font-size: 13px');
         this.activeIndex = number;
         this._isMounted && this.setState({active: this.activeIndex});
         this.scrollview_X_ref.scrollTo({
@@ -649,7 +681,6 @@ export default class App extends Component {
     //   this.state.buttonClick,
     //   this.activeIndex,
     //   this.state.active,
-    //   Theme.APPBAR_HEIGHT,
     // );
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
@@ -658,9 +689,11 @@ export default class App extends Component {
     const topInfo = this.topInfo();
     const grandYInfo = this.grandYInfo();
     const grandXInfo = this.grandXInfo();
-    const topScrollView = this.topScrollView();
+    const topSpacialBar = this.topSpacialBar();
     const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30); //232px
-
+    const marginTopAni = this.marginTopAni();
+    const widthInfo = this.widthInfo();
+    const {scrollY} = this.state;
     return (
       <View style={styles.container}>
         <Animated.Image
@@ -682,12 +715,12 @@ export default class App extends Component {
             width: '100%',
             alignItem: 'center',
             justifyContent: 'center',
-            zIndex: 200,
-            elevation: 200,
           }}>
           <TouchableOpacity
             style={{
               position: 'absolute',
+              // zIndex: zIndexHeader,
+              // elevation: zIndexHeader,
               zIndex: 1000,
               elevation: 1000,
               width: Theme.relativeWidth(9),
@@ -740,10 +773,11 @@ export default class App extends Component {
             position: 'absolute',
             opacity: opacityInfo,
             top: topInfo,
-            zIndex: 100,
+            zIndex: 1200,
+            elevation: 1200,
             borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
             height: Theme.relativeHeight(17),
-            width: Theme.relativeWidth(93),
+            width: widthInfo,
             backgroundColor: 'white',
             alignSelf: 'center',
             padding: 20,
@@ -754,14 +788,20 @@ export default class App extends Component {
             },
             shadowOpacity: 0.22,
             shadowRadius: 2.22,
-            elevation: 3,
             transform: [{translateY: grandYInfo}],
+            justifyContent: 'space-between',
           }}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <Animated.Text
               style={{
                 transform: [{translateX: grandXInfo}],
-                // fontSize: Theme.fontLarge,
+                fontSize: Theme.fontLarge,
+                fontWeight: 'bold',
               }}>
               Ka Kar
             </Animated.Text>
@@ -772,19 +812,156 @@ export default class App extends Component {
             <Text>20-25min</Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <FontAwesome5 name={'facebook'} />
-            <Text>Promotion</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <TouchableOpacity onPress={() => alert('Facebook')}>
+                <FontAwesome5
+                  name={'facebook-f'}
+                  color="blue"
+                  size={18}
+                  style={{
+                    marginLeft: 0,
+                    marginRight: 10,
+                  }}
+                />
+              </TouchableOpacity>
+              <FontAwesome5
+                name={'instagram'}
+                color="gold"
+                size={18}
+                style={{
+                  marginLeft: 0,
+                  marginRight: 10,
+                }}
+              />
+              <FontAwesome5 name={'twitter'} color="#00acee" size={18} />
+            </View>
+            <View style={{flexDirection: 'row'}}>
+              <View
+                style={{
+                  backgroundColor: 'yellow',
+                  padding: 3,
+                  borderRadius: 3,
+                  marginLeft: 0,
+                  marginRight: 10,
+                }}>
+                <Text>New</Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'red',
+                  padding: 3,
+                  borderRadius: 3,
+                  marginLeft: 0,
+                  marginRight: 10,
+                }}>
+                <Text>Promotion</Text>
+              </View>
+              <View
+                style={{
+                  backgroundColor: 'blue',
+                  padding: 3,
+                  borderRadius: 3,
+                }}>
+                <Text>Popular</Text>
+              </View>
+            </View>
           </View>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: 'red',
+            paddingLeft: 15,
+            paddingTop: 8,
+            paddingBottom: 8,
+            paddingRight: 15,
+            alignSelf: 'center',
+            width: Theme.relativeWidth(93),
+            borderRadius: (Theme.APPBAR_HEIGHT - 35) / 2,
+            top: topSpacialBar,
+            marginTop: marginTopAni,
+          }}>
+          <Text>
+            ເຂົ້າຈີ່ທີ່ມີຫຼາຍກວ່າເຂົ້າຈີ່ຫຼາກຫາຍລົດຊາດ ພ້ອມຊຸບອຸ່ນໆ
+            ບໍ່ວາຈະເປັນຊຸບ ໝາກອຶ ຊຸບຄຣີມສາລີ ຊຸບຜັກໂຫມ ທີ່ເປັນໄດ້ທັງອາຫານເຊົ້າ
+            ຫຼື ອາຫານວ່າງພ້ອມ ເຄື່ອງດື່ມ ກາເຟ ແລະ ເຂົ້າໜົມ.
+          </Text>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            // flexDirection: 'row',
+            top: topSpacialBar,
+            marginBottom: 8,
+            marginTop: 10,
+            left: Theme.relativeWidth(3),
+          }}>
+          <Text>Promotion</Text>
+          <ScrollView
+            horizontal={true}
+            style={{
+              zIndex: 1400,
+              elevation: 1400,
+            }}>
+            <View
+              style={{
+                width: 110,
+                height: 108,
+                backgroundColor: 'gray',
+                borderRadius: (Theme.APPBAR_HEIGHT - 40) / 2,
+                marginLeft: 0,
+                marginRight: 20,
+              }}>
+              <View
+                style={{
+                  top: 80,
+                  backgroundColor: 'rgba(255,255,255,0.9)',
+                  height: 28,
+                  borderBottomLeftRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
+                  borderBottomRightRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
+                }}>
+                <Text style={{textAlign: 'center', color: 'white'}}>
+                  Ice Capucinos
+                </Text>
+              </View>
+            </View>
+          </ScrollView>
+        </Animated.View>
+
+        <Animated.View
+          style={{
+            flexDirection: 'row',
+            top: topSpacialBar,
+            marginBottom: 8,
+            marginTop: scrollY.interpolate({
+              inputRange: [0, 140],
+              outputRange: [0, 5],
+              extrapolate: 'clamp',
+            }),
+            left: Theme.relativeWidth(3),
+          }}>
+          <Text>Category</Text>
         </Animated.View>
 
         <Animated.ScrollView
           // nestedScrollEnabled={true}
-          // overScrollMode={'never'}
+          scrollEventThrottle={16}
+          overScrollMode={'never'}
+          removeClippedSubviews={false}
           stickyHeaderIndices={[0]}
           ref={(ref) => {
             this.scrollview_ref = ref;
           }}
-          style={{zIndex: 1000, elevation: 1000}}
+          style={{
+            zIndex: 1500,
+            elevation: 1500,
+          }}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
             {
@@ -802,14 +979,15 @@ export default class App extends Component {
             horizontal={true}
             style={{
               flexDirection: 'row',
-              top: 250,
+              top: 260,
+              padding: 10,
+              backgroundColor: '#fffffa',
             }}>
-            <Text>Category</Text>
             {this.items.map(({title}, i) => {
               return (
                 <TouchableOpacity
                   key={i}
-                  activeOpacity={0.5}
+                  activeOpacity={1}
                   onPress={() => {
                     if ((this.activeIndex === i) !== true) {
                       this._isMounted && this.setState({buttonClick: true});
@@ -820,18 +998,34 @@ export default class App extends Component {
                     const layout = event.nativeEvent.layout.x;
                     this.arrayX[i] = layout;
                   }}
-                  style={
-                    this.state.active === i
+                  style={[
+                    {
+                      marginLeft: 0,
+                      marginRight: 10,
+                      paddingVertical: 5,
+                      paddingHorizontal: 20,
+                      borderRadius: 30,
+                    },
+                    this.activeIndex === i
                       ? {
-                          padding: 15,
-                          backgroundColor: 'blue',
+                          borderColor: '#F4801E',
+                          borderWidth: 2,
+                          backgroundColor: 'rgba(244,128,30,0.1)',
                         }
                       : {
-                          padding: 15,
-                          backgroundColor: '#f4801e',
-                        }
-                  }>
-                  <Text style={{color: '#fff'}}>{title}</Text>
+                          borderColor: '#E9E9E9',
+                          borderWidth: 2,
+                          backgroundColor: '#ffffff',
+                        },
+                  ]}>
+                  <Text
+                    style={
+                      this.state.active === i
+                        ? {color: '#F4801E'}
+                        : {color: '#E9E9E9'}
+                    }>
+                    {title}
+                  </Text>
                 </TouchableOpacity>
               );
             })}
@@ -840,7 +1034,7 @@ export default class App extends Component {
           {this.items.map(({title, content}, key) => (
             <View
               key={key}
-              style={{top: 220}}
+              style={{top: 260}}
               onLayout={(event) => {
                 const layout = event.nativeEvent.layout;
                 this.arr[key] = layout.y;
