@@ -1,7 +1,7 @@
 import {StyleSheet} from 'react-native';
-import {ThemeUtils, Color} from '../utils';
+import {Theme, Color} from '../utils';
 
-const HEADER_IMAGE_HEIGHT = ThemeUtils.relativeHeight(30);
+const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30);
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -9,14 +9,14 @@ export default StyleSheet.create({
   /*header style*/
   headerLeftIcon: {
     position: 'absolute',
-    left: ThemeUtils.relativeWidth(2),
+    left: Theme.relativeWidth(2),
   },
   headerRightIcon: {
     position: 'absolute',
-    right: ThemeUtils.relativeWidth(2),
+    right: Theme.relativeWidth(2),
   },
   headerStyle: {
-    height: ThemeUtils.APPBAR_HEIGHT,
+    height: Theme.APPBAR_HEIGHT,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
@@ -26,7 +26,7 @@ export default StyleSheet.create({
     textAlign: 'center',
     justifyContent: 'center',
     color: Color.HEADER_TEXT_COLOR,
-    fontSize: ThemeUtils.fontNormal,
+    fontSize: Theme.fontNormal,
   },
   /*Top Image Style*/
   headerImageStyle: {
@@ -47,20 +47,20 @@ export default StyleSheet.create({
     zIndex: 100,
     textAlign: 'center',
     color: Color.BLACK,
-    top: ThemeUtils.relativeHeight(35),
+    top: Theme.relativeHeight(35),
     left: 0,
     right: 0,
-    fontSize: ThemeUtils.fontXLarge,
+    fontSize: Theme.fontXLarge,
   },
   /*song count text style*/
   songCountStyle: {
     position: 'absolute',
     textAlign: 'center',
     fontWeight: '400',
-    top: ThemeUtils.relativeHeight(40),
+    top: Theme.relativeHeight(40),
     left: 0,
     right: 0,
-    fontSize: ThemeUtils.fontNormal,
+    fontSize: Theme.fontNormal,
   },
   artistCardContainerStyle: {
     backgroundColor: Color.CARD_BG_COLOR,
@@ -71,22 +71,22 @@ export default StyleSheet.create({
       height: 3,
     },
     padding: 15,
-    marginVertical: ThemeUtils.relativeWidth(1),
-    marginHorizontal: ThemeUtils.relativeWidth(2),
+    marginVertical: Theme.relativeWidth(1),
+    marginHorizontal: Theme.relativeWidth(2),
     flexDirection: 'row',
     alignItems: 'center',
   },
   artistImage: {
-    height: ThemeUtils.relativeWidth(15),
-    width: ThemeUtils.relativeWidth(15),
-    borderRadius: ThemeUtils.relativeWidth(7.5),
+    height: Theme.relativeWidth(15),
+    width: Theme.relativeWidth(15),
+    borderRadius: Theme.relativeWidth(7.5),
   },
   songTitleStyle: {
-    fontSize: ThemeUtils.fontNormal,
+    fontSize: Theme.fontNormal,
     color: Color.BLACK,
   },
   cardTextContainer: {
     flex: 1,
-    margin: ThemeUtils.relativeWidth(3),
+    margin: Theme.relativeWidth(3),
   },
 });

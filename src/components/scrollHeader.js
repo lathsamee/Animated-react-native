@@ -12,7 +12,7 @@ import {
 import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 /*utils*/
 import styles from './style';
-import {ThemeUtils, Color} from '../utils';
+import {Theme, Color} from '../utils';
 /*Data*/
 import artistData from '../assets/data/SongData';
 import coverImage from '../image/bob-marley-cover.jpg';
@@ -68,9 +68,9 @@ export default class Header extends Component {
     return scrollY.interpolate({
       inputRange: [0, 80, 140],
       outputRange: [
-        ThemeUtils.relativeWidth(30),
-        ThemeUtils.relativeWidth(38),
-        ThemeUtils.relativeWidth(10),
+        Theme.relativeWidth(30),
+        Theme.relativeWidth(38),
+        Theme.relativeWidth(10),
       ],
       extrapolate: 'clamp',
       useNativeDriver: true,
@@ -83,10 +83,7 @@ export default class Header extends Component {
 
     return scrollY.interpolate({
       inputRange: [0, 140],
-      outputRange: [
-        ThemeUtils.relativeHeight(20),
-        Platform.OS === 'ios' ? 8 : 10,
-      ],
+      outputRange: [Theme.relativeHeight(20), Platform.OS === 'ios' ? 8 : 10],
       extrapolate: 'clamp',
       useNativeDriver: true,
     });
@@ -98,10 +95,7 @@ export default class Header extends Component {
 
     return scrollY.interpolate({
       inputRange: [0, 140],
-      outputRange: [
-        ThemeUtils.relativeWidth(40),
-        ThemeUtils.APPBAR_HEIGHT - 20,
-      ],
+      outputRange: [Theme.relativeWidth(40), Theme.APPBAR_HEIGHT - 20],
       extrapolate: 'clamp',
       useNativeDriver: true,
     });
@@ -113,10 +107,7 @@ export default class Header extends Component {
 
     return scrollY.interpolate({
       inputRange: [0, 140],
-      outputRange: [
-        ThemeUtils.relativeWidth(40),
-        ThemeUtils.APPBAR_HEIGHT - 20,
-      ],
+      outputRange: [Theme.relativeWidth(40), Theme.APPBAR_HEIGHT - 20],
       extrapolate: 'clamp',
       useNativeDriver: true,
     });
@@ -152,10 +143,7 @@ export default class Header extends Component {
 
     return scrollY.interpolate({
       inputRange: [0, 250],
-      outputRange: [
-        ThemeUtils.relativeWidth(100) - ThemeUtils.APPBAR_HEIGHT - 10,
-        0,
-      ],
+      outputRange: [Theme.relativeWidth(100) - Theme.APPBAR_HEIGHT - 10, 0],
       extrapolate: 'clamp',
       useNativeDriver: true,
     });
@@ -263,7 +251,7 @@ export default class Header extends Component {
             {
               borderWidth: profileImageBorderWidth,
               borderColor: profileImageBorderColor,
-              borderRadius: (ThemeUtils.APPBAR_HEIGHT - 20) / 2,
+              borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
               height: profileImageHeight,
               width: profileImageWidth,
               transform: [

@@ -1,4 +1,4 @@
 import Color from './Colors';
-import ThemeUtils from './ThemeUtils';
+import Theme from './ThemeUtils';
 
-export {Color, ThemeUtils};
+export {Color, Theme};

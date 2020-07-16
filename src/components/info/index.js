@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {Animated, Text, View, Dimensions} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {ThemeUtils} from '../../utils';
+import {Theme} from '../../utils';
 const Info = ({Y, name}) => {
   const opacity = Y.interpolate({
     inputRange: [0, 120],
@@ -58,7 +58,7 @@ const Info = ({Y, name}) => {
         <Animated.Text
           style={{
             transform: [{translateX: grandX}],
-            fontSize: ThemeUtils.fontLarge,
+            fontSize: Theme.fontLarge,
           }}>
           {name}
         </Animated.Text>
