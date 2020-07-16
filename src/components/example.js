@@ -589,8 +589,23 @@ export default class App extends Component {
 
     if (this.state.buttonClick === false) {
       if (grandYInt !== 0) {
+        console.log(
+          '%c grand Y Int:',
+          'color: green; font-size: 13px',
+          grandYInt !== 0,
+        );
         if (this.activeIndex !== number - 1) {
+          console.log(
+            '%c this.activeIndex !== number - 1:',
+            'color: green; font-size: 13px',
+            this.activeIndex !== number - 1,
+          );
           if (number - 1 !== -1) {
+            console.log(
+              '%c number - 1 !== -1:',
+              'color: green; font-size: 13px',
+              number - 1 !== -1,
+            );
             console.log('%c redred:', 'color: green; font-size: 13px');
             this.activeIndex = number - 1;
             this._isMounted &&
@@ -618,12 +633,12 @@ export default class App extends Component {
   };
 
   render() {
-    // console.log(
-    //   'See it',
-    //   this.state.buttonClick,
-    //   this.activeIndex,
-    //   this.state.active,
-    // );
+    console.log(
+      'See it',
+      this.state.buttonClick,
+      this.activeIndex,
+      this.state.active,
+    );
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
     const opacityTitle = this.opacityTitle();
@@ -632,7 +647,7 @@ export default class App extends Component {
     const grandYInfo = this.grandYInfo();
     const grandXInfo = this.grandXInfo();
     return (
-      <View style={[styles.container, {backgroundColor: 'red'}]}>
+      <View style={styles.container}>
         <Animated.Image
           style={{
             height: 200,
@@ -655,11 +670,31 @@ export default class App extends Component {
             zIndex: 200,
             elevation: 200,
           }}>
-          <View style={{position: 'absolute', left: 7}}>
-            <FontAwesome5 name={'angle-left'} brand size={30} />
+          <View
+            style={{
+              position: 'absolute',
+              left: 7,
+              backgroundColor: '#2fd1c9',
+              paddingHorizontal: 7,
+              borderRadius: 20,
+            }}>
+            <FontAwesome5 name={'angle-left'} brand size={25} color="white" />
           </View>
-          <View style={{position: 'absolute', right: 7}}>
-            <FontAwesome5 name={'calendar-plus'} brand size={30} />
+          <View
+            style={{
+              position: 'absolute',
+              right: 7,
+              backgroundColor: 'white',
+              // paddingHorizontal: 7,
+              padding: 5,
+              borderRadius: 20,
+            }}>
+            <FontAwesome5
+              name={'calendar-plus'}
+              brand
+              size={15}
+              color="orange"
+            />
           </View>
           <Animated.Text
             style={{
@@ -673,7 +708,7 @@ export default class App extends Component {
           </Animated.Text>
         </Animated.View>
 
-        {/* <Animated.View
+        <Animated.View
           style={{
             position: 'absolute',
             opacity: opacityInfo,
@@ -713,7 +748,7 @@ export default class App extends Component {
             <FontAwesome5 name={'facebook'} />
             <Text>Promotion</Text>
           </View>
-        </Animated.View> */}
+        </Animated.View>
 
         <Animated.ScrollView
           // nestedScrollEnabled={true}
@@ -722,6 +757,7 @@ export default class App extends Component {
           ref={(ref) => {
             this.scrollview_ref = ref;
           }}
+          style={{zIndex: 1000, elevation: 1000}}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
             {
@@ -735,13 +771,16 @@ export default class App extends Component {
             ref={(ref) => {
               this.scrollview_X_ref = ref;
             }}
-            // nestedScrollEnabled={true}
+            nestedScrollEnabled={true}
             horizontal={true}
             style={{
               flexDirection: 'row',
-              backgroundColor: '#1e73be',
+              // backgroundColor: '#1e73be',
+              // position: 'absolute',
+              // zIndex: 500,
+              // elevation: 500,
               padding: 5,
-              top: 200,
+              top: 180,
             }}>
             {this.items.map(({title}, i) => {
               return (
@@ -754,6 +793,10 @@ export default class App extends Component {
                       this.downButtonHandler(i);
                     }
                   }}
+                  onLayout={(event) => {
+                    const layout = event.nativeEvent.layout.x;
+                    this.arrayX[i] = layout;
+                  }}
                   style={
                     this.state.active === i
                       ? {
@@ -764,11 +807,7 @@ export default class App extends Component {
                           padding: 15,
                           backgroundColor: '#f4801e',
                         }
-                  }
-                  onLayout={(event) => {
-                    const layout = event.nativeEvent.layout.x;
-                    this.arrayX[i] = layout;
-                  }}>
+                  }>
                   <Text style={{color: '#fff'}}>{title}</Text>
                 </TouchableOpacity>
               );
