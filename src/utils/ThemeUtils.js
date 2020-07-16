@@ -6,6 +6,7 @@ const realWidth = height > width ? width : height;
 const realHeight = height > width ? height : width;
 
 const APPBAR_HEIGHT = Platform.OS === 'ios' ? 44 : 56;
+console.log('%c realHeight:', 'color: green; font-size: 13px', realHeight);
 
 const relativeWidth = (num) => (realWidth * num) / 100;
 const relativeHeight = (num) => (realHeight * num) / 100;

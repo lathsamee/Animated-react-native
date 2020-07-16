@@ -14,7 +14,9 @@ import {
   Animated,
   Button,
   TouchableWithoutFeedback,
+  Platform,
 } from 'react-native';
+import {Theme} from '../utils';
 //import all the components we needed
 export default class App extends Component {
   _isMounted = false;
@@ -538,15 +540,15 @@ export default class App extends Component {
   opacityTitle = () => {
     const {scrollY} = this.state;
     return scrollY.interpolate({
-      inputRange: [0, 100, 200],
-      outputRange: [0, 0.1, 50],
+      inputRange: [0, 50, 150, 200, 300],
+      outputRange: [0, 0.1, 0.5, 50, 140],
       extrapolate: 'clamp',
     });
   };
   opacityInfo = () => {
     const {scrollY} = this.state;
     return scrollY.interpolate({
-      inputRange: [0, 120],
+      inputRange: [0, 140],
       outputRange: [1, 0],
       extrapolate: 'clamp',
     });
@@ -554,9 +556,18 @@ export default class App extends Component {
   topInfo = () => {
     const {scrollY} = this.state;
     return scrollY.interpolate({
-      inputRange: [0, 120],
-      outputRange: [120, 0],
+      inputRange: [0, 140],
+      outputRange: [Theme.relativeHeight(20), Platform.OS === 'ios' ? 8 : 10],
       extrapolate: 'clamp',
+    });
+  };
+  topScrollView = () => {
+    const {scrollY} = this.state;
+    return scrollY.interpolate({
+      inputRange: [0, 140],
+      outputRange: [Theme.relativeHeight(20), Platform.OS === 'ios' ? 8 : 10],
+      extrapolate: 'clamp',
+      useNativeDriver: true,
     });
   };
   grandYInfo = () => {
@@ -633,12 +644,13 @@ export default class App extends Component {
   };
 
   render() {
-    console.log(
-      'See it',
-      this.state.buttonClick,
-      this.activeIndex,
-      this.state.active,
-    );
+    // console.log(
+    //   'See it',
+    //   this.state.buttonClick,
+    //   this.activeIndex,
+    //   this.state.active,
+    //   Theme.APPBAR_HEIGHT,
+    // );
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
     const opacityTitle = this.opacityTitle();
@@ -646,11 +658,14 @@ export default class App extends Component {
     const topInfo = this.topInfo();
     const grandYInfo = this.grandYInfo();
     const grandXInfo = this.grandXInfo();
+    const topScrollView = this.topScrollView();
+    const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30); //232px
+
     return (
       <View style={styles.container}>
         <Animated.Image
           style={{
-            height: 200,
+            height: HEADER_IMAGE_HEIGHT,
             width: '100%',
             top: 0,
             alignSelf: 'center',
@@ -662,7 +677,7 @@ export default class App extends Component {
 
         <Animated.View
           style={{
-            height: 70,
+            height: Theme.APPBAR_HEIGHT,
             backgroundColor: backgroundTitle,
             width: '100%',
             alignItem: 'center',
@@ -670,39 +685,51 @@ export default class App extends Component {
             zIndex: 200,
             elevation: 200,
           }}>
-          <View
+          <TouchableOpacity
             style={{
               position: 'absolute',
-              left: 7,
+              zIndex: 1000,
+              elevation: 1000,
+              width: Theme.relativeWidth(9),
+              height: Theme.relativeWidth(9),
+              justifyContent: 'center',
+              alignItems: 'center',
+              left: Theme.relativeWidth(2),
               backgroundColor: '#2fd1c9',
               paddingHorizontal: 7,
-              borderRadius: 20,
-            }}>
+              borderRadius: Theme.APPBAR_HEIGHT,
+            }}
+            onPress={() => alert('Ohhh')}>
             <FontAwesome5 name={'angle-left'} brand size={25} color="white" />
-          </View>
-          <View
+          </TouchableOpacity>
+          <TouchableOpacity
             style={{
               position: 'absolute',
-              right: 7,
+              zIndex: 1000,
+              elevation: 1000,
+              width: Theme.relativeWidth(9),
+              height: Theme.relativeWidth(9),
+              justifyContent: 'center',
+              alignItems: 'center',
+              right: Theme.relativeWidth(2),
               backgroundColor: 'white',
-              // paddingHorizontal: 7,
               padding: 5,
-              borderRadius: 20,
-            }}>
+              borderRadius: Theme.APPBAR_HEIGHT,
+            }}
+            onPress={() => alert('Ohhh')}>
             <FontAwesome5
               name={'calendar-plus'}
               brand
-              size={15}
+              size={18}
               color="orange"
             />
-          </View>
+          </TouchableOpacity>
           <Animated.Text
             style={{
               textAlign: 'center',
               justifyContent: 'center',
-              fontSize: 16,
               opacity: opacityTitle,
-              // fontSize: ThemeUtils.fontXLarge,
+              fontSize: Theme.fontLarge,
             }}>
             Ka Kar
           </Animated.Text>
@@ -714,9 +741,9 @@ export default class App extends Component {
             opacity: opacityInfo,
             top: topInfo,
             zIndex: 100,
-            borderRadius: 20,
-            height: 120,
-            width: '90%',
+            borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
+            height: Theme.relativeHeight(17),
+            width: Theme.relativeWidth(93),
             backgroundColor: 'white',
             alignSelf: 'center',
             padding: 20,
@@ -734,7 +761,7 @@ export default class App extends Component {
             <Animated.Text
               style={{
                 transform: [{translateX: grandXInfo}],
-                // fontSize: ThemeUtils.fontLarge,
+                // fontSize: Theme.fontLarge,
               }}>
               Ka Kar
             </Animated.Text>
@@ -775,13 +802,9 @@ export default class App extends Component {
             horizontal={true}
             style={{
               flexDirection: 'row',
-              // backgroundColor: '#1e73be',
-              // position: 'absolute',
-              // zIndex: 500,
-              // elevation: 500,
-              padding: 5,
-              top: 180,
+              top: 250,
             }}>
+            <Text>Category</Text>
             {this.items.map(({title}, i) => {
               return (
                 <TouchableOpacity
