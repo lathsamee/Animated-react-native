@@ -7,11 +7,12 @@ import HeaderY from './src/components/scrollYHeader';
 import HeaderTabs from './src/components/tabs/UberEats';
 import Exam from './src/components/example';
 import Type from './src/components/typeScript/UberEats';
+import Modals from './src/components/Modalkkk';
 const App = (props) => {
   return (
     <View style={{flex: 1}}>
       <SafeAreaProvider>
-        <Exam />
+        <Modals />
       </SafeAreaProvider>
     </View>
   );
