@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 //import react in our project
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-
 import {
   View,
   ScrollView,
@@ -10,22 +9,17 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  TextInput,
   Animated,
-  Button,
-  TouchableWithoutFeedback,
   Platform,
 } from 'react-native';
 import {Theme} from '../utils';
-import {vec} from 'react-native-redash';
-//import all the components we needed
 export default class App extends Component {
   _isMounted = false;
   headerImage = require('../image/feature_graphic.png');
+  productImage = require('../image/feature_graphic.png');
 
   constructor() {
     super();
-    //Array of Item to add in Scrollview
     this.items = [
       {
         title: 'rice',
@@ -78,43 +72,43 @@ export default class App extends Component {
         title: 'fish',
         content: [
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken',
+            pd_name: 'Fish',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 20000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish rice',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish rice',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish rice',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish rice',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'Fish rice',
             pd_detail:
               'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
             pd_price: 10000,
@@ -125,45 +119,45 @@ export default class App extends Component {
         title: 'mobile',
         content: [
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken',
+            pd_name: 'mobile',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 20000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
           {
-            pd_name: 'chicken rice',
+            pd_name: 'mobile rice',
             pd_detail:
-              'Hainanese chicken rice is a dish of poached chicken and seasoned rice',
+              'Hainanese mobile rice is a dish of poached mobile and seasoned rice',
             pd_price: 10000,
           },
         ],
@@ -481,11 +475,9 @@ export default class App extends Component {
       },
     ];
 
-    //Blank array to store the location of each item
     this.arr = [];
     this.arrayX = [];
     this.activeIndex = 0;
-    // this.arraySticky = [0, 1, 2];
 
     this.state = {
       dynamicY: 0,
@@ -519,7 +511,7 @@ export default class App extends Component {
     this._isMounted &&
       this.setState({active: num}, () =>
         setTimeout(() => {
-          this.setState({buttonClick: false});
+          this._isMounted && this.setState({buttonClick: false});
         }, 1000),
       );
   }
@@ -619,11 +611,6 @@ export default class App extends Component {
   };
 
   handleScroll = (event) => {
-    // console.log(
-    //   '%c event:',
-    //   'color: green; font-size: 13px',
-    //   event.nativeEvent.contentOffset.y,
-    // );
     let grandY = event.nativeEvent.contentOffset.y;
     let grandYInt = parseInt(grandY);
     let arrayInt = this.arr.map((data) => parseInt(data));
@@ -632,38 +619,23 @@ export default class App extends Component {
 
     if (this.state.buttonClick === false) {
       if (grandYInt !== 0) {
-        console.log(
-          '%c grand Y Int:',
-          'color: green; font-size: 13px',
-          grandYInt !== 0,
-        );
         if (this.activeIndex !== numberMinusOne) {
-          // console.log(
-          //   '%c this.activeIndex !== number - 1:',
-          //   'color: green; font-size: 13px',
-          //   this.activeIndex !== number - 1,
-          // );
-          if (numberMinusOne !== -1) {
-            // console.log(
-            //   '%c number - 1 !== -1:',
-            //   'color: green; font-size: 13px',
-            //   number - 1 !== -1,
-            // );
-            // console.log('%c redred:', 'color: green; font-size: 13px');
-            this.activeIndex = number;
-            this._isMounted &&
-              this.setState({
-                active: this.activeIndex,
+          if (numberMinusOne !== -1 && numberMinusOne !== -2) {
+            if (this.activeIndex < numberMinusOne) {
+              this.activeIndex = numberMinusOne;
+              this._isMounted &&
+                this.setState({
+                  active: this.activeIndex,
+                });
+              this.scrollview_X_ref.scrollTo({
+                x: this.arrayX[this.activeIndex],
+                y: 0,
+                animated: true,
               });
-            this.scrollview_X_ref.scrollTo({
-              x: this.arrayX[this.activeIndex],
-              y: 0,
-              animated: true,
-            });
+            }
           }
         }
       } else {
-        // console.log('%c greenreddn:', 'color: green; font-size: 13px');
         this.activeIndex = number;
         this._isMounted && this.setState({active: this.activeIndex});
         this.scrollview_X_ref.scrollTo({
@@ -676,12 +648,13 @@ export default class App extends Component {
   };
 
   render() {
-    // console.log(
-    //   'See it',
-    //   this.state.buttonClick,
-    //   this.activeIndex,
-    //   this.state.active,
-    // );
+    console.log(
+      'See it',
+      this.state.buttonClick,
+      this.activeIndex,
+      this.state.active,
+    );
+    const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30);
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
     const opacityTitle = this.opacityTitle();
@@ -689,64 +662,51 @@ export default class App extends Component {
     const topInfo = this.topInfo();
     const grandYInfo = this.grandYInfo();
     const grandXInfo = this.grandXInfo();
-    const topSpacialBar = this.topSpacialBar();
-    const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30); //232px
+    const topSpacialBar = this.topSpacialBar(); //232px
     const marginTopAni = this.marginTopAni();
     const widthInfo = this.widthInfo();
     const {scrollY} = this.state;
     return (
       <View style={styles.container}>
         <Animated.Image
-          style={{
-            height: HEADER_IMAGE_HEIGHT,
-            width: '100%',
-            top: 0,
-            alignSelf: 'center',
-            position: 'absolute',
-            opacity: opacityImage,
-          }}
+          style={[
+            styles.imageAni,
+            {
+              height: HEADER_IMAGE_HEIGHT,
+              opacity: opacityImage,
+            },
+          ]}
           source={this.headerImage}
         />
 
         <Animated.View
-          style={{
-            height: Theme.APPBAR_HEIGHT,
-            backgroundColor: backgroundTitle,
-            width: '100%',
-            alignItem: 'center',
-            justifyContent: 'center',
-          }}>
+          style={[
+            styles.viewHeaderAni,
+            {
+              backgroundColor: backgroundTitle,
+            },
+          ]}>
           <TouchableOpacity
-            style={{
-              position: 'absolute',
-              zIndex: 90,
-              elevation: 90,
-              width: Theme.relativeWidth(9),
-              height: Theme.relativeWidth(9),
-              justifyContent: 'center',
-              alignItems: 'center',
-              left: Theme.relativeWidth(2),
-              backgroundColor: 'rgba(47, 209, 201, 1.0)',
-              paddingHorizontal: 7,
-              borderRadius: Theme.APPBAR_HEIGHT,
-            }}
+            style={[
+              styles.buttonHeaderAni,
+              {
+                left: Theme.relativeWidth(2),
+                backgroundColor: 'rgba(47, 209, 201, 1.0)',
+                paddingHorizontal: 7,
+              },
+            ]}
             onPress={() => alert('Ohhh')}>
             <FontAwesome5 name={'angle-left'} brand size={25} color="white" />
           </TouchableOpacity>
           <TouchableOpacity
-            style={{
-              position: 'absolute',
-              zIndex: 90,
-              elevation: 90,
-              width: Theme.relativeWidth(9),
-              height: Theme.relativeWidth(9),
-              justifyContent: 'center',
-              alignItems: 'center',
-              right: Theme.relativeWidth(2),
-              backgroundColor: 'white',
-              padding: 5,
-              borderRadius: Theme.APPBAR_HEIGHT,
-            }}
+            style={[
+              styles.buttonHeaderAni,
+              {
+                right: Theme.relativeWidth(2),
+                backgroundColor: 'white',
+                padding: 5,
+              },
+            ]}
             onPress={() => alert('Ohhh')}>
             <FontAwesome5
               name={'calendar-plus'}
@@ -756,46 +716,27 @@ export default class App extends Component {
             />
           </TouchableOpacity>
           <Animated.Text
-            style={{
-              textAlign: 'center',
-              justifyContent: 'center',
-              opacity: opacityTitle,
-              fontSize: Theme.fontLarge,
-            }}>
+            style={[
+              styles.textAni,
+              {
+                opacity: opacityTitle,
+              },
+            ]}>
             Ka Kar
           </Animated.Text>
         </Animated.View>
 
         <Animated.View
-          style={{
-            position: 'absolute',
-            opacity: opacityInfo,
-            top: topInfo,
-            zIndex: 100,
-            elevation: 100,
-            borderColor: '#707070',
-            borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
-            height: Theme.relativeHeight(17),
-            width: widthInfo,
-            backgroundColor: 'white',
-            alignSelf: 'center',
-            padding: 20,
-            shadowColor: '#000000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
+          style={[
+            styles.viewInfoAni,
+            {
+              opacity: opacityInfo,
+              top: topInfo,
+              width: widthInfo,
+              transform: [{translateY: grandYInfo}],
             },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-            transform: [{translateY: grandYInfo}],
-            justifyContent: 'space-between',
-          }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+          ]}>
+          <View style={styles.viewInfoTextFr}>
             <Animated.Text
               style={{
                 transform: [{translateX: grandXInfo}],
@@ -804,19 +745,18 @@ export default class App extends Component {
               }}>
               Ka Kar
             </Animated.Text>
-            <Text>100+</Text>
+            <Text>
+              100+ <FontAwesome5 name={'heart'} color="#F1902F" />
+            </Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <Text>ເຂົ້າປຽກ, ຕຳປູ, ຕຳປາ</Text>
-            <Text>20-25min</Text>
+            <Text>
+              <FontAwesome5 name={'clock'} /> 20-25min
+            </Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
+            <View style={styles.viewInfoTextSe}>
               <TouchableOpacity onPress={() => alert('Facebook')}>
                 <FontAwesome5
                   name={'facebook-f'}
@@ -873,27 +813,13 @@ export default class App extends Component {
         </Animated.View>
 
         <Animated.View
-          style={{
-            flexDirection: 'row',
-            backgroundColor: '#2FD1C9',
-            paddingLeft: 15,
-            paddingTop: 8,
-            paddingBottom: 8,
-            paddingRight: 15,
-            alignSelf: 'center',
-            width: Theme.relativeWidth(93),
-            borderRadius: (Theme.APPBAR_HEIGHT - 35) / 2,
-            borderColor: '#C2C2C2',
-            top: topSpacialBar,
-            marginTop: marginTopAni,
-            shadowColor: '#000000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
+          style={[
+            styles.viewIntroAni,
+            {
+              top: topSpacialBar,
+              marginTop: marginTopAni,
             },
-            shadowOpacity: 0.22,
-            shadowRadius: 2.22,
-          }}>
+          ]}>
           <Text style={{color: '#ffffff'}}>
             ເຂົ້າຈີ່ທີ່ມີຫຼາຍກວ່າເຂົ້າຈີ່ຫຼາກຫາຍລົດຊາດ ພ້ອມຊຸບອຸ່ນໆ
             ບໍ່ວາຈະເປັນຊຸບ ໝາກອຶ ຊຸບຄຣີມສາລີ ຊຸບຜັກໂຫມ ທີ່ເປັນໄດ້ທັງອາຫານເຊົ້າ
@@ -902,22 +828,13 @@ export default class App extends Component {
         </Animated.View>
 
         <Animated.View
-          style={{
-            top: topSpacialBar,
-            marginBottom: 8,
-            marginTop: 10,
-            left: Theme.relativeWidth(3),
-          }}>
-          <Text
-            style={{
-              marginTop: 10,
-              marginBottom: 15,
-              color: '#F1902F',
-              fontWeight: 'bold',
-              fontSize: Theme.fontLarge,
-            }}>
-            Promotion
-          </Text>
+          style={[
+            styles.viewProAni,
+            {
+              top: topSpacialBar,
+            },
+          ]}>
+          <Text style={styles.proText}>Promotion</Text>
 
           <ScrollView
             horizontal={true}
@@ -925,23 +842,8 @@ export default class App extends Component {
               zIndex: 10,
               elevation: 10,
             }}>
-            <View
-              style={{
-                width: 110,
-                height: 108,
-                backgroundColor: 'gray',
-                borderRadius: (Theme.APPBAR_HEIGHT - 40) / 2,
-                marginLeft: 0,
-                marginRight: 20,
-              }}>
-              <View
-                style={{
-                  top: 80,
-                  backgroundColor: 'rgba(255,255,255,0.9)',
-                  height: 28,
-                  borderBottomLeftRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
-                  borderBottomRightRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
-                }}>
+            <View style={styles.viewPromo}>
+              <View style={styles.viewCropPro}>
                 <Text style={{textAlign: 'center', color: 'white'}}>
                   Ice Capucinos
                 </Text>
@@ -951,26 +853,18 @@ export default class App extends Component {
         </Animated.View>
 
         <Animated.View
-          style={{
-            flexDirection: 'row',
-            top: topSpacialBar,
-            marginBottom: 8,
-            marginTop: scrollY.interpolate({
-              inputRange: [0, 140],
-              outputRange: [0, 5],
-              extrapolate: 'clamp',
-            }),
-            left: Theme.relativeWidth(3),
-          }}>
-          <Text
-            style={{
-              marginTop: 10,
-              color: '#2FD1C9',
-              fontSize: Theme.fontLarge,
-              fontWeight: 'bold',
-            }}>
-            Category
-          </Text>
+          style={[
+            styles.viewCatAni,
+            {
+              top: topSpacialBar,
+              marginTop: scrollY.interpolate({
+                inputRange: [0, 140],
+                outputRange: [0, 5],
+                extrapolate: 'clamp',
+              }),
+            },
+          ]}>
+          <Text style={styles.textCat}>Category</Text>
         </Animated.View>
 
         <Animated.ScrollView
@@ -1011,10 +905,11 @@ export default class App extends Component {
                 <TouchableOpacity
                   key={i}
                   activeOpacity={1}
-                  onPress={() => {
+                  onPress={async () => {
                     if ((this.activeIndex === i) !== true) {
-                      this._isMounted && this.setState({buttonClick: true});
-                      this.downButtonHandler(i);
+                      this._isMounted &&
+                        (await this.setState({buttonClick: true}));
+                      await this.downButtonHandler(i);
                     }
                   }}
                   onLayout={(event) => {
@@ -1022,13 +917,7 @@ export default class App extends Component {
                     this.arrayX[i] = layout;
                   }}
                   style={[
-                    {
-                      marginLeft: 0,
-                      marginRight: 10,
-                      paddingVertical: 5,
-                      paddingHorizontal: 30,
-                      borderRadius: 30,
-                    },
+                    styles.buttonCat,
                     this.activeIndex === i
                       ? {
                           borderColor: '#F4801E',
@@ -1043,7 +932,7 @@ export default class App extends Component {
                   ]}>
                   <Text
                     style={[
-                      {fontSize: Theme.fontNormal, fontWeight: 'bold'},
+                      styles.textButtonCat,
                       this.state.active === i
                         ? {color: '#F4801E'}
                         : {color: '#C4CCCE'},
@@ -1063,17 +952,48 @@ export default class App extends Component {
                 const layout = event.nativeEvent.layout;
                 this.arr[key] = layout.y;
               }}>
-              <Text style={styles.text}>
-                {key}. {title}
-              </Text>
-              <View style={styles.separator} />
               <View>
                 {content.map(({pd_name, pd_price, pd_detail}, i) => {
                   return (
-                    <View key={i} style={{padding: 10}}>
-                      <Text>{pd_name}</Text>
-                      <Text>{pd_price}</Text>
-                      <Text>{pd_detail}</Text>
+                    <View
+                      key={i}
+                      style={{
+                        padding: 10,
+                        flex: 1,
+                      }}>
+                      <TouchableOpacity
+                        style={{
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                        }}
+                        onPress={() => alert('modal add product')}>
+                        <View>
+                          <Image
+                            source={this.productImage}
+                            style={{width: 110, height: 110, borderRadius: 10}}
+                          />
+                        </View>
+                        <View
+                          style={{
+                            marginLeft: 20,
+                            marginTop: 5,
+                            justifyContent: 'space-between',
+                          }}>
+                          <Text style={{fontSize: Theme.fontLarge}}>
+                            {pd_name}
+                          </Text>
+                          <Text
+                            style={{
+                              fontSize: Theme.fontNormal,
+                              color: '#2BD0C0',
+                            }}>
+                            {pd_price} kip
+                          </Text>
+                          <Text style={{fontSize: Theme.fontSmall}}>
+                            {pd_detail}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     </View>
                   );
                 })}
@@ -1090,10 +1010,131 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  imageAni: {
+    width: '100%',
+    top: 0,
+    alignSelf: 'center',
+    position: 'absolute',
+  },
+  viewHeaderAni: {
+    height: Theme.APPBAR_HEIGHT,
+    width: '100%',
+    justifyContent: 'center',
+  },
+  buttonHeaderAni: {
+    position: 'absolute',
+    zIndex: 90,
+    elevation: 90,
+    width: Theme.relativeWidth(9),
+    height: Theme.relativeWidth(9),
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: Theme.APPBAR_HEIGHT,
+  },
+  textAni: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    fontSize: Theme.fontLarge,
+  },
+  viewInfoAni: {
+    position: 'absolute',
+    zIndex: 100,
+    elevation: 100,
+    borderColor: '#707070',
+    borderRadius: (Theme.APPBAR_HEIGHT - 20) / 2,
+    height: Theme.relativeHeight(17),
+    backgroundColor: 'white',
+    alignSelf: 'center',
+    padding: 20,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+    justifyContent: 'space-between',
+  },
+  viewInfoTextFr: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  viewInfoTextSe: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  viewIntroAni: {
+    flexDirection: 'row',
+    backgroundColor: '#2FD1C9',
+    paddingLeft: 15,
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingRight: 15,
+    alignSelf: 'center',
+    width: Theme.relativeWidth(93),
+    borderRadius: (Theme.APPBAR_HEIGHT - 35) / 2,
+    borderColor: '#C2C2C2',
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+  },
+  viewProAni: {
+    marginBottom: 8,
+    marginTop: 10,
+    left: Theme.relativeWidth(3),
+  },
+  proText: {
+    marginTop: 10,
+    marginBottom: 15,
+    color: '#F1902F',
+    fontWeight: 'bold',
+    fontSize: Theme.fontLarge,
+  },
+  viewPromo: {
+    width: 110,
+    height: 108,
+    backgroundColor: 'gray',
+    borderRadius: (Theme.APPBAR_HEIGHT - 40) / 2,
+    marginLeft: 0,
+    marginRight: 20,
+  },
+  viewCropPro: {
+    top: 80,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    height: 28,
+    borderBottomLeftRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
+    borderBottomRightRadius: (Theme.APPBAR_HEIGHT - 42) / 2,
+  },
+  viewCatAni: {
+    flexDirection: 'row',
+    marginBottom: 8,
+    left: Theme.relativeWidth(3),
+  },
+  textCat: {
+    marginTop: 10,
+    color: '#2FD1C9',
+    fontSize: Theme.fontLarge,
+    fontWeight: 'bold',
+  },
+  buttonCat: {
+    marginLeft: 0,
+    marginRight: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+  },
+  textButtonCat: {fontSize: Theme.fontNormal, fontWeight: 'bold'},
+
   separator: {
     height: 1,
     backgroundColor: '#707080',
-    width: '100%',
+    width: '95%',
   },
 
   text: {
