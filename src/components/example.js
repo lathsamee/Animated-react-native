@@ -508,12 +508,11 @@ export default class App extends Component {
       animated: true,
     });
     this.activeIndex = num;
-    this._isMounted &&
-      this.setState({active: num}, () =>
-        setTimeout(() => {
-          this._isMounted && this.setState({buttonClick: false});
-        }, 1000),
-      );
+    this._isMounted && this.setState({active: num, isScroll: false});
+    // , () =>
+    //   setTimeout(() => {
+    //     this._isMounted && this.setState({buttonClick: false});
+    //   }, 1000),
   }
 
   opacity = () => {
@@ -617,32 +616,41 @@ export default class App extends Component {
     let number = arrayInt.findIndex((data) => data >= grandYInt);
     let numberMinusOne = number - 1;
 
-    if (this.state.buttonClick === false) {
-      if (grandYInt !== 0) {
-        if (this.activeIndex !== numberMinusOne) {
-          if (numberMinusOne !== -1 && numberMinusOne !== -2) {
-            if (this.activeIndex < numberMinusOne) {
-              this.activeIndex = numberMinusOne;
-              this._isMounted &&
-                this.setState({
-                  active: this.activeIndex,
-                });
-              this.scrollview_X_ref.scrollTo({
-                x: this.arrayX[this.activeIndex],
-                y: 0,
-                animated: true,
-              });
-            }
-          }
+    if (this.state.isScroll) {
+      if (this.activeIndex !== numberMinusOne) {
+        if (numberMinusOne === -1) {
+          this.activeIndex = 0;
+          this._isMounted && this.setState({active: 0});
+          this.scrollview_X_ref.scrollTo({
+            x: this.arrayX[this.activeIndex],
+            y: 0,
+            animated: true,
+          });
+        } else if (numberMinusOne === 0) {
+          this.activeIndex = 0;
+          this._isMounted && this.setState({active: 0});
+          this.scrollview_X_ref.scrollTo({
+            x: this.arrayX[this.activeIndex],
+            y: 0,
+            animated: true,
+          });
+        } else if (numberMinusOne >= 1) {
+          this.activeIndex = numberMinusOne;
+          this._isMounted && this.setState({active: numberMinusOne});
+          this.scrollview_X_ref.scrollTo({
+            x: this.arrayX[this.activeIndex],
+            y: 0,
+            animated: true,
+          });
+        } else if (numberMinusOne !== -2) {
+          this.activeIndex = numberMinusOne;
+          this._isMounted && this.setState({active: numberMinusOne});
+          this.scrollview_X_ref.scrollTo({
+            x: this.arrayX[this.activeIndex],
+            y: 0,
+            animated: true,
+          });
         }
-      } else {
-        this.activeIndex = number;
-        this._isMounted && this.setState({active: this.activeIndex});
-        this.scrollview_X_ref.scrollTo({
-          x: this.arrayX[this.activeIndex],
-          y: 0,
-          animated: true,
-        });
       }
     }
   };
@@ -650,7 +658,7 @@ export default class App extends Component {
   render() {
     console.log(
       'See it',
-      this.state.buttonClick,
+      this.state.isScroll,
       this.activeIndex,
       this.state.active,
     );
@@ -868,6 +876,7 @@ export default class App extends Component {
         </Animated.View>
 
         <Animated.ScrollView
+          persistentScrollbar={true}
           scrollEventThrottle={16}
           overScrollMode={'never'}
           removeClippedSubviews={false}
@@ -905,20 +914,21 @@ export default class App extends Component {
                 <TouchableOpacity
                   key={i}
                   activeOpacity={1}
-                  onPress={async () => {
-                    if ((this.activeIndex === i) !== true) {
-                      this._isMounted &&
-                        (await this.setState({buttonClick: true}));
-                      await this.downButtonHandler(i);
-                    }
-                  }}
+                  // onPress={async () => {
+                  //   if ((this.activeIndex === i) !== true) {
+                  //     this._isMounted &&
+                  //       (await this.setState({buttonClick: true}));
+                  //     await this.downButtonHandler(i);
+                  //   }
+                  // }}
+                  onPress={() => this.downButtonHandler(i)}
                   onLayout={(event) => {
                     const layout = event.nativeEvent.layout.x;
                     this.arrayX[i] = layout;
                   }}
                   style={[
                     styles.buttonCat,
-                    this.activeIndex === i
+                    this.state.active === i
                       ? {
                           borderColor: '#F4801E',
                           borderWidth: 2,
