@@ -497,6 +497,7 @@ export default class App extends Component {
   }
 
   downButtonHandler(num) {
+    // setTimeout(() => {
     this.scrollview_ref.getNode().scrollTo({
       x: 0,
       y: this.arr[num],
@@ -508,11 +509,8 @@ export default class App extends Component {
       animated: true,
     });
     this.activeIndex = num;
-    this._isMounted && this.setState({active: num, isScroll: false});
-    // , () =>
-    //   setTimeout(() => {
-    //     this._isMounted && this.setState({buttonClick: false});
-    //   }, 1000),
+    this._isMounted && this.setState({active: num});
+    // }, 1);
   }
 
   opacity = () => {
@@ -615,53 +613,57 @@ export default class App extends Component {
     let arrayInt = this.arr.map((data) => parseInt(data));
     let number = arrayInt.findIndex((data) => data >= grandYInt);
     let numberMinusOne = number - 1;
+    let indexCat =
+      this.activeIndex !== 0
+        ? this.activeIndex
+        : numberMinusOne > this.activeIndex
+        ? numberMinusOne
+        : numberMinusOne < this.activeIndex
+        ? numberMinusOne
+        : numberMinusOne;
+    console.log(
+      '%c indexCat:',
+      'color: green; font-size: 13px',
+      this.activeIndex,
+      numberMinusOne,
+      indexCat,
+    );
 
-    if (this.state.isScroll) {
-      if (this.activeIndex !== numberMinusOne) {
-        if (numberMinusOne === -1) {
-          this.activeIndex = 0;
-          this._isMounted && this.setState({active: 0});
-          this.scrollview_X_ref.scrollTo({
-            x: this.arrayX[this.activeIndex],
-            y: 0,
-            animated: true,
-          });
-        } else if (numberMinusOne === 0) {
-          this.activeIndex = 0;
-          this._isMounted && this.setState({active: 0});
-          this.scrollview_X_ref.scrollTo({
-            x: this.arrayX[this.activeIndex],
-            y: 0,
-            animated: true,
-          });
-        } else if (numberMinusOne >= 1) {
-          this.activeIndex = numberMinusOne;
-          this._isMounted && this.setState({active: numberMinusOne});
-          this.scrollview_X_ref.scrollTo({
-            x: this.arrayX[this.activeIndex],
-            y: 0,
-            animated: true,
-          });
-        } else if (numberMinusOne !== -2) {
-          this.activeIndex = numberMinusOne;
-          this._isMounted && this.setState({active: numberMinusOne});
-          this.scrollview_X_ref.scrollTo({
-            x: this.arrayX[this.activeIndex],
-            y: 0,
-            animated: true,
-          });
-        }
-      }
+    // if (this.state.isScroll) {
+    // if (this.activeIndex !== numberMinusOne) {
+    if (indexCat === -1 || indexCat === 0) {
+      this._isMounted && this.setState({active: 0});
+      this.scrollview_X_ref.scrollTo({
+        x: this.arrayX[0],
+        y: 0,
+        animated: true,
+      });
+    } else if (indexCat >= 1) {
+      this._isMounted && this.setState({active: indexCat});
+      this.scrollview_X_ref.scrollTo({
+        x: this.arrayX[indexCat],
+        y: 0,
+        animated: true,
+      });
+    } else if (indexCat !== -2) {
+      this._isMounted && this.setState({active: indexCat});
+      this.scrollview_X_ref.scrollTo({
+        x: this.arrayX[indexCat],
+        y: 0,
+        animated: true,
+      });
     }
+    // }
+    // }
   };
 
   render() {
-    console.log(
-      'See it',
-      this.state.isScroll,
-      this.activeIndex,
-      this.state.active,
-    );
+    // console.log(
+    //   'See it',
+    //   this.state.isScroll,
+    //   this.activeIndex,
+    //   this.state.active,
+    // );
     const HEADER_IMAGE_HEIGHT = Theme.relativeHeight(30);
     const opacityImage = this.opacity();
     const backgroundTitle = this.backgrounded();
@@ -820,67 +822,12 @@ export default class App extends Component {
           </View>
         </Animated.View>
 
-        <Animated.View
-          style={[
-            styles.viewIntroAni,
-            {
-              top: topSpacialBar,
-              marginTop: marginTopAni,
-            },
-          ]}>
-          <Text style={{color: '#ffffff'}}>
-            ເຂົ້າຈີ່ທີ່ມີຫຼາຍກວ່າເຂົ້າຈີ່ຫຼາກຫາຍລົດຊາດ ພ້ອມຊຸບອຸ່ນໆ
-            ບໍ່ວາຈະເປັນຊຸບ ໝາກອຶ ຊຸບຄຣີມສາລີ ຊຸບຜັກໂຫມ ທີ່ເປັນໄດ້ທັງອາຫານເຊົ້າ
-            ຫຼື ອາຫານວ່າງພ້ອມ ເຄື່ອງດື່ມ ກາເຟ ແລະ ເຂົ້າໜົມ.
-          </Text>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.viewProAni,
-            {
-              top: topSpacialBar,
-            },
-          ]}>
-          <Text style={styles.proText}>Promotion</Text>
-
-          <ScrollView
-            horizontal={true}
-            style={{
-              zIndex: 10,
-              elevation: 10,
-            }}>
-            <View style={styles.viewPromo}>
-              <View style={styles.viewCropPro}>
-                <Text style={{textAlign: 'center', color: 'white'}}>
-                  Ice Capucinos
-                </Text>
-              </View>
-            </View>
-          </ScrollView>
-        </Animated.View>
-
-        <Animated.View
-          style={[
-            styles.viewCatAni,
-            {
-              top: topSpacialBar,
-              marginTop: scrollY.interpolate({
-                inputRange: [0, 140],
-                outputRange: [0, 5],
-                extrapolate: 'clamp',
-              }),
-            },
-          ]}>
-          <Text style={styles.textCat}>Category</Text>
-        </Animated.View>
-
         <Animated.ScrollView
-          persistentScrollbar={true}
           scrollEventThrottle={16}
+          scrollToOverflowEnabled={true}
           overScrollMode={'never'}
           removeClippedSubviews={false}
-          stickyHeaderIndices={[0]}
+          stickyHeaderIndices={[3]}
           ref={(ref) => {
             this.scrollview_ref = ref;
           }}
@@ -897,6 +844,37 @@ export default class App extends Component {
               },
             },
           )}>
+          <View style={styles.viewIntroAni}>
+            <Text style={{color: '#ffffff'}}>
+              ເຂົ້າຈີ່ທີ່ມີຫຼາຍກວ່າເຂົ້າຈີ່ຫຼາກຫາຍລົດຊາດ ພ້ອມຊຸບອຸ່ນໆ
+              ບໍ່ວາຈະເປັນຊຸບ ໝາກອຶ ຊຸບຄຣີມສາລີ ຊຸບຜັກໂຫມ ທີ່ເປັນໄດ້ທັງອາຫານເຊົ້າ
+              ຫຼື ອາຫານວ່າງພ້ອມ ເຄື່ອງດື່ມ ກາເຟ ແລະ ເຂົ້າໜົມ.
+            </Text>
+          </View>
+
+          <View style={styles.viewProAni}>
+            <Text style={styles.proText}>Promotion</Text>
+
+            <ScrollView
+              horizontal={true}
+              style={{
+                zIndex: 10,
+                elevation: 10,
+              }}>
+              <View style={styles.viewPromo}>
+                <View style={styles.viewCropPro}>
+                  <Text style={{textAlign: 'center', color: 'white'}}>
+                    Ice Capucinos
+                  </Text>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+
+          <View style={styles.viewCatAni}>
+            <Text style={styles.textCat}>Category</Text>
+          </View>
+
           <ScrollView
             ref={(ref) => {
               this.scrollview_X_ref = ref;
@@ -905,7 +883,7 @@ export default class App extends Component {
             horizontal={true}
             style={{
               flexDirection: 'row',
-              top: 260,
+              // top: 260,
               padding: 10,
               backgroundColor: '#fffffa',
             }}>
@@ -921,7 +899,9 @@ export default class App extends Component {
                   //     await this.downButtonHandler(i);
                   //   }
                   // }}
-                  onPress={() => this.downButtonHandler(i)}
+                  onPress={async () => {
+                    await this.downButtonHandler(i);
+                  }}
                   onLayout={(event) => {
                     const layout = event.nativeEvent.layout.x;
                     this.arrayX[i] = layout;
@@ -957,7 +937,7 @@ export default class App extends Component {
           {this.items.map(({title, content}, key) => (
             <View
               key={key}
-              style={{top: 260}}
+              // style={{top: 260}}
               onLayout={(event) => {
                 const layout = event.nativeEvent.layout;
                 this.arr[key] = layout.y;
@@ -1078,6 +1058,7 @@ const styles = StyleSheet.create({
   viewIntroAni: {
     flexDirection: 'row',
     backgroundColor: '#2FD1C9',
+    marginTop: 250,
     paddingLeft: 15,
     paddingTop: 8,
     paddingBottom: 8,

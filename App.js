@@ -12,7 +12,7 @@ const App = (props) => {
   return (
     <View style={{flex: 1}}>
       <SafeAreaProvider>
-        <Modals />
+        <Exam />
       </SafeAreaProvider>
     </View>
   );
