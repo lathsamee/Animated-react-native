@@ -9,6 +9,7 @@ import Exam from './src/components/example';
 import Type from './src/components/typeScript/UberEats';
 import Modals from './src/components/Modalkkk';
 import FList from './src/components/Flatlist';
+import TEst from './src/components/Flatlist/test';
 const App = (props) => {
   return (
     <View style={{flex: 1}}>
