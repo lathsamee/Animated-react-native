@@ -7,16 +7,14 @@ import {
   Text,
   StatusBar,
   Image,
+  VirtualizedList,
+  Animated,
 } from 'react-native';
 import Axios from 'axios';
-
-const Item = ({title}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const App = () => {
+  const scrollY = new Animated.Value(0);
   const [datas, setData] = useState([]);
   useEffect(() => {
     loadData();
@@ -58,13 +56,23 @@ const App = () => {
     </View>
   );
 
+  const Y = () => {
+    return;
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <FlatList
+      <AnimatedFlatList
         data={datas}
         renderItem={renderItemContent}
         keyExtractor={(item) => item.id}
         stickyHeaderIndices={[0]}
+        // * on scroll
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {y: scrollY}}}],
+          {useNativeDriver: true},
+        )}
         ListHeaderComponent={
           <FlatList
             horizontal
@@ -78,6 +86,24 @@ const App = () => {
 
         // }
       />
+      <Animated.View
+        style={{
+          width: 300,
+          height: 150,
+          borderRadius: 20,
+          backgroundColor: 'green',
+          transform: [
+            {
+              translateY: scrollY.interpolate({
+                inputRange: [0, 140],
+                ouputRange: [0, 140],
+                extrapolate: 'clamp',
+              }),
+            },
+          ],
+        }}>
+        <Text>Header view hide When Scroll</Text>
+      </Animated.View>
     </SafeAreaView>
   );
 };
