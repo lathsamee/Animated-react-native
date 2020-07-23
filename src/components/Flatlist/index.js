@@ -7,17 +7,14 @@ import {
   Text,
   StatusBar,
   Image,
+  ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import Axios from 'axios';
 
-const Item = ({title}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-
 const App = () => {
   const [datas, setData] = useState([]);
+  const [isScroll, setIsscroll] = useState(true);
   useEffect(() => {
     loadData();
   }, []);
@@ -57,27 +54,89 @@ const App = () => {
       />
     </View>
   );
+  const renderEmtryComponent = () => <ActivityIndicator size="large" />;
 
-  return (
-    <SafeAreaView style={styles.container}>
+  example1 = () => {
+    return (
       <FlatList
         data={datas}
         renderItem={renderItemContent}
-        keyExtractor={(item) => item.id}
-        stickyHeaderIndices={[0]}
+        keyExtractor={(item) => item.id.toString()}
+        stickyHeaderIndices={[2]}
         ListHeaderComponent={
           <FlatList
             horizontal
             backgroundColor={'#fff'}
             data={datas}
             renderItem={renderItemHeader}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.id.toString()}
           />
         }
-        // ListFooterComponent={
-
-        // }
+        ListEmptyComponent={renderEmtryComponent}
       />
+    );
+  };
+  example2 = () => {
+    return (
+      <ScrollView>
+        <View>
+          <FlatList
+            nestedScrollEnabled={true}
+            data={datas}
+            renderItem={renderItemContent}
+            keyExtractor={(item) => item.id.toString()}
+            stickyHeaderIndices={[0]}
+            ListHeaderComponent={
+              <FlatList
+                horizontal
+                backgroundColor={'#fff'}
+                data={datas}
+                renderItem={renderItemHeader}
+                keyExtractor={(item) => item.id.toString()}
+              />
+            }
+            ListEmptyComponent={renderEmtryComponent}
+          />
+        </View>
+      </ScrollView>
+    );
+  };
+  example3 = () => {
+    return (
+      <ScrollView>
+        {datas.length > 0 ? (
+          datas.map((data, i) => {
+            return (
+              <View key={i}>
+                <View
+                  key={data.id}
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'flex-start',
+                    marginBottom: 20,
+                  }}>
+                  <Image
+                    source={{uri: data.url}}
+                    style={{width: 130, height: 130, borderRadius: 10}}
+                  />
+                  <Text style={{marginLeft: 20}}>{data.title}</Text>
+                </View>
+              </View>
+            );
+          })
+        ) : (
+          <ActivityIndicator size="large" />
+        )}
+      </ScrollView>
+    );
+  };
+
+  console.log('%c isScroll:', 'color: green; font-size: 13px', isScroll);
+  return (
+    <SafeAreaView style={styles.container}>
+      {example1()}
+      {/* {example2()} */}
+      {/* {example3()} */}
     </SafeAreaView>
   );
 };
