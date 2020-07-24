@@ -1,95 +1,97 @@
-import React, {useState} from 'react';
+import React, {Component} from 'react';
 import {
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
   Text,
-  TouchableOpacity,
   View,
+  FlatList,
+  Dimensions,
+  Button,
+  StyleSheet,
 } from 'react-native';
-import Axios from 'axios';
 
-const App = () => {
-  const user = [
-    {
-      userId: 1,
-      id: 1,
-      title: 'quidem molestiae enim',
-    },
-    {
-      userId: 1,
-      id: 2,
-      title: 'sunt qui excepturi placeat culpa',
-    },
-    {
-      userId: 1,
-      id: 3,
-      title: 'omnis laborum odio',
-    },
-    {
-      userId: 1,
-      id: 4,
-      title: 'non esse culpa molestiae omnis sed optio',
-    },
-    {
-      userId: 1,
-      id: 5,
-      title: 'eaque aut omnis a',
-    },
-    {
-      userId: 1,
-      id: 6,
-      title: 'natus impedit quibusdam illo est',
-    },
-    {
-      userId: 1,
-      id: 7,
-      title: 'quibusdam autem aliquid et et quia',
-    },
-    {
-      userId: 1,
-      id: 8,
-      title: 'qui fuga est a eum',
-    },
-    {
-      userId: 1,
-      id: 9,
-      title: 'saepe unde necessitatibus rem',
-    },
-    {
-      userId: 1,
-      id: 10,
-      title: 'distinctio laborum qui',
-    },
-  ];
-  return (
-    <SafeAreaView style={styles.container}>
-      <FlatList
-        data={user}
-        // renderItem={(item) => (
-        //   <View>
-        //     <Text>{item.id}</Text>
-        //   </View>
-        // )}
-        // keyExtractor={(item) => item.id}
-      />
-    </SafeAreaView>
-  );
+const {width} = Dimensions.get('window');
+
+const style = {
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: width,
+  height: 50,
+  flex: 1,
+  borderWidth: 1,
 };
+
+const COLORS = ['deepskyblue', 'fuchsia', 'lightblue '];
+
+function getData(number) {
+  let data = [];
+  for (var i = 0; i < number; ++i) {
+    data.push('' + i);
+  }
+
+  return data;
+}
+
+class ScrollToExample extends Component {
+  getItemLayout = (data, index) => ({length: 50, offset: 50 * index, index});
+
+  getColor(index) {
+    const mod = index % 3;
+    return COLORS[mod];
+  }
+
+  scrollToIndex = () => {
+    let randomIndex = Math.floor(
+      Math.random(Date.now()) * this.props.data.length,
+    );
+    console.log('random', randomIndex);
+
+    this.flatListRef.scrollToIndex({animated: true, index: 4});
+  };
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Button
+            onPress={this.scrollToIndex}
+            title="Tap to scrollToIndex"
+            color="darkblue"
+          />
+        </View>
+        <FlatList
+          style={{flex: 1}}
+          ref={(ref) => {
+            this.flatListRef = ref;
+          }}
+          keyExtractor={(item) => item}
+          getItemLayout={this.getItemLayout}
+          initialScrollIndex={1}
+          initialNumToRender={1}
+          renderItem={({item, index}) => (
+            <View style={{...style, backgroundColor: this.getColor(index)}}>
+              <Text>{item}</Text>
+            </View>
+          )}
+          {...this.props}
+        />
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  item: {
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
+  header: {
+    paddingTop: 20,
+    backgroundColor: 'darkturquoise',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 
-export default App;
+export default class app extends Component {
+  render() {
+    return <ScrollToExample data={getData(100)} />;
+  }
+}
