@@ -11,13 +11,19 @@ import {
   ActivityIndicator,
   Animated,
   Button,
+  TouchableOpacity,
 } from 'react-native';
 import Axios from 'axios';
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 const App = () => {
-  let flatListRef = null;
-  console.log('%c flatListRef:', 'color: green; font-size: 13px', flatListRef);
+  let scrollOffsetY_ref = null;
+  let scrollOffsetX_ref = null;
+  let offsetY = [];
+  let offsetX = [];
+  let activeIndex = 1;
   const [datas, setData] = useState([]);
+  const [active, setActive] = useState(1);
+  const [isScroll, setIsScroll] = useState(true);
   const y = new Animated.Value(0);
   const onScroll = Animated.event([{nativeEvent: {contentOffset: {y}}}], {
     useNativeDriver: false,
@@ -25,8 +31,41 @@ const App = () => {
   });
 
   const handleScroll = (event) => {
-    let scroll = event.nativeEvent.contentOffset.y;
-    // console.log('%c scroll:', 'color: green; font-size: 13px', scroll);
+    let scrollOffsetY = parseInt(event.nativeEvent.contentOffset.y);
+    let offset = offsetY.findIndex((data) => data >= scrollOffsetY);
+
+    if (isScroll) {
+      if (activeIndex !== offset) {
+        if (offset === -1 || offset === 0) {
+          activeIndex = 1;
+          setActive(1);
+          scrollOffsetX_ref.scrollToOffset({
+            offset: offsetX[offset],
+            // x: offsetX[0],
+            // y: 0,
+            animated: true,
+          });
+        } else if (offset >= 1) {
+          activeIndex = offset;
+          setActive(offset);
+          scrollOffsetX_ref.scrollToOffset({
+            offset: offsetX[offset],
+            // x: offsetX[offset],
+            // y: 0,
+            animated: true,
+          });
+        } else if (offset !== -2) {
+          activeIndex = offset;
+          setActive(offset);
+          scrollOffsetX_ref.scrollToOffset({
+            offset: offsetX[offset],
+            // x: offsetX[offset],
+            // y: 0,
+            animated: true,
+          });
+        }
+      }
+    }
   };
   useEffect(() => {
     loadData();
@@ -45,9 +84,13 @@ const App = () => {
         justifyContent: 'flex-start',
         marginBottom: 20,
         // padding: 50,
-        backgroundColor: 'pink',
+        backgroundColor: active === item.id ? 'red' : 'pink',
         width: '100%',
         height: 100,
+      }}
+      onLayout={(event) => {
+        let y = parseInt(event.nativeEvent.layout.y);
+        offsetY[item.id] = y - 35;
       }}>
       {/* <Image
         source={{uri: item.url}}
@@ -60,37 +103,48 @@ const App = () => {
     </View>
   );
   const renderItemHeader = ({item}) => (
-    <View
+    <TouchableOpacity
       key={item.id}
       style={{
         flexDirection: 'row',
         justifyContent: 'flex-start',
         marginBottom: 20,
         marginRight: 10,
-        backgroundColor: 'yellow',
+        backgroundColor: active === item.id ? 'red' : 'yellow',
+      }}
+      onLayout={(event) => {
+        const x = event.nativeEvent.layout.x;
+        offsetX[item.id] = parseInt(x);
+      }}
+      onPress={async () => {
+        if ((activeIndex === item.id) !== true) {
+          await setIsScroll(false);
+          await scrollToIndexs(item.id);
+        }
       }}>
       {/* <Image
         source={{uri: item.url}}
         style={{width: 110, height: 110, borderRadius: 10}}
       /> */}
 
-      <Text style={{marginLeft: 20}}>
-        {item.id}
-        {item.name}
-      </Text>
-    </View>
+      <Text style={{marginLeft: 20}}>{item.name}</Text>
+    </TouchableOpacity>
   );
   const renderEmtryComponent = () => <ActivityIndicator size="large" />;
-  // const getLayount = (data, index) =>
-  //   console.log(
-  //     '%c  ({length:10, offset: 10*index, index}):',
-  //     'color: green; font-size: 13px',
-  //     {length: 10, offset: 10 * index, index},
-  //   );
 
-  const scrollToIndexs = () => {
-    flatListRef.scrollToIndex({animated: true, index: 4});
+  const scrollToIndexs = async (i) => {
+    await scrollOffsetY_ref.getNode().scrollToOffset({
+      animated: true,
+      offset: offsetY[i],
+    });
+    await scrollOffsetX_ref.scrollToOffset({
+      animated: true,
+      offset: offsetX[i],
+    });
+    activeIndex = i;
+    setActive(i);
   };
+
   example1 = () => {
     return (
       <AnimatedFlatList
@@ -101,34 +155,27 @@ const App = () => {
             extrapolate: 'clamp',
           }),
         }}
-        // debug={true}
-        ref={(ref) => (flatListRef = ref)}
+        ref={(ref) => (scrollOffsetY_ref = ref)}
         bounces={false}
         scrollEventThrottle={16}
         data={datas}
-        renderItem={renderItemContent}
-        initialNumToRender={datas.length}
-        getItemLayout={(data, index) => ({
-          length: 123,
-          offset: 123 * index,
-          index,
-        })}
-        // onMomentumScrollEnd={(event) =>
-        //   console.log(
-        //     '%c event.contentOffset.y:',
-        //     'color: green; font-size: 13px',
-        //     event.nativeEvent.contentOffset.y,
-        //   )
-        // }
+        onMomentumScrollBegin={(event) =>
+          offsetY[activeIndex] !== event.nativeEvent.contentOffset.y
+            ? setIsScroll(true)
+            : setIsScroll(true)
+        }
+        CellRendererComponent={renderItemContent}
+        // renderItem={renderItemContent}
         keyExtractor={(item) => item.id.toString()}
         {...{onScroll}}
         stickyHeaderIndices={[0]}
         ListHeaderComponent={
           <FlatList
+            ref={(ref) => (scrollOffsetX_ref = ref)}
             horizontal
             backgroundColor={'#fff'}
             data={datas}
-            renderItem={renderItemHeader}
+            CellRendererComponent={renderItemHeader}
             keyExtractor={(item) => item.id.toString()}
           />
         }
@@ -159,11 +206,6 @@ const App = () => {
         }}>
         <Text>Header</Text>
       </Animated.View>
-      <Button
-        style={{zIndex: 1000, position: 'absolute'}}
-        title="ScrollIndex"
-        onPress={scrollToIndexs}
-      />
       {example1()}
     </SafeAreaView>
   );
