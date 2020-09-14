@@ -11,11 +11,12 @@ import Modals from './src/components/Modalkkk';
 import FList from './src/components/Flatlist';
 import AnimateFlats from './src/components/Flatlist/animated';
 import Test from './src/components/Flatlist/test';
+import TabView from './src/components/Native Tab View';
 const App = (props) => {
   return (
     <View style={{flex: 1}}>
       <SafeAreaProvider>
-        <Test />
+        <TabView />
       </SafeAreaProvider>
     </View>
   );
