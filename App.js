@@ -12,11 +12,12 @@ import FList from './src/components/Flatlist';
 import AnimateFlats from './src/components/Flatlist/animated';
 import Test from './src/components/Flatlist/test';
 import TabView from './src/components/Native Tab View';
+import Tabs from './src/components/tabs/customTab/Tabs';
 const App = (props) => {
   return (
     <View style={{flex: 1}}>
       <SafeAreaProvider>
-        <TabView />
+        <Tabs />
       </SafeAreaProvider>
     </View>
   );
