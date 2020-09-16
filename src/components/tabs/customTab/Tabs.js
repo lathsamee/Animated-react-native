@@ -7,11 +7,12 @@ import {
   Dimensions,
   Animated,
 } from 'react-native';
+import {Container, Header} from 'native-base';
 import {TabView, TabBar} from 'react-native-tab-view';
 import FlatList from './components/FlatList';
 
 const TabBarHeight = 48;
-const HeaderHeight = 300;
+const HeaderHeight = 140;
 const tab1ItemSize = Dimensions.get('window').width - 20;
 const tab2ItemSize = Dimensions.get('window').width - 20;
 
@@ -77,7 +78,7 @@ const App = () => {
     });
     return (
       <Animated.View style={[styles.header, {transform: [{translateY: y}]}]}>
-        <Text>{'Header'}</Text>
+        <Text>{'Tier'}</Text>
       </Animated.View>
     );
   };
@@ -143,6 +144,7 @@ const App = () => {
         TabBarHeight={TabBarHeight}
         HeaderHeight={HeaderHeight}
         data={data}
+        // renderHeader={}
         renderItem={renderItem}
         scrollY={scrollY}
         isListGliding={(status) => isListGliding.current(status)}
@@ -208,19 +210,24 @@ const App = () => {
   };
 
   return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1}}>
+    <Container>
+      <Header style={{zIndex: 1000}}>
+        <View>
+          <Text>Header</Text>
+        </View>
+      </Header>
+      <View style={{flex: 1, zIndex: -10}}>
         {renderTabView()}
         {renderHeader()}
       </View>
-    </SafeAreaView>
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
     top: 0,
-    height: 300,
+    height: 140,
     width: '100%',
     backgroundColor: '#40C4FF',
     alignItems: 'center',
