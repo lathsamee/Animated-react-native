@@ -7,7 +7,7 @@ import {
   Dimensions,
   Animated,
 } from 'react-native';
-import {Container, Header} from 'native-base';
+import {Container, Content, Header} from 'native-base';
 import {TabView, TabBar} from 'react-native-tab-view';
 import FlatList from './components/FlatList';
 
@@ -123,18 +123,32 @@ const App = () => {
     );
   };
 
+  const renderCategoryTab1 = () => {
+    return (
+      <View>
+        <Text>Category List</Text>
+      </View>
+    );
+  };
+  const renderCategoryTab2 = () => {
+    return <View style={{height: 10}} />;
+  };
+
   const renderScene = ({route}) => {
     const focused = route.key === routes[tabIndex].key;
     let data;
     let renderItem;
+    let headerComponent;
     switch (route.key) {
       case 'tab1':
         data = tab1Data;
         renderItem = rednerTab1Item;
+        headerComponent = renderCategoryTab1;
         break;
       case 'tab2':
         data = tab2Data;
         renderItem = rednerTab2Item;
+        headerComponent = renderCategoryTab2;
         break;
       default:
         return null;
@@ -144,8 +158,8 @@ const App = () => {
         TabBarHeight={TabBarHeight}
         HeaderHeight={HeaderHeight}
         data={data}
-        // renderHeader={}
         renderItem={renderItem}
+        ListHeaderComponent={headerComponent}
         scrollY={scrollY}
         isListGliding={(status) => isListGliding.current(status)}
         syncScrollOffset={() => syncScrollOffset()}
@@ -217,7 +231,19 @@ const App = () => {
         </View>
       </Header>
       <View style={{flex: 1, zIndex: -10}}>
-        {renderTabView()}
+        {/* {renderTabView()} */}
+
+        <TabView
+          onIndexChange={(index) => setIndex(index)}
+          navigationState={{index: tabIndex, routes}}
+          renderScene={renderScene}
+          renderTabBar={renderTabBar}
+          initialLayout={{
+            height: 0,
+            width: Dimensions.get('window').width,
+          }}
+        />
+
         {renderHeader()}
       </View>
     </Container>

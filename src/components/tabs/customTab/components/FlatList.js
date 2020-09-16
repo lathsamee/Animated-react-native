@@ -34,6 +34,7 @@ const FlatListHelper = (props) => {
 
   return (
     <AnimatedFlatList
+      {...props}
       scrollToOverflowEnabled={true}
       numColumns={1}
       ref={onGetRef}
@@ -45,7 +46,6 @@ const FlatListHelper = (props) => {
       onScrollEndDrag={onScrollEndDrag}
       onMomentumScrollEnd={onMomentumScrollEnd}
       ItemSeparatorComponent={() => <View style={{height: 10}} />}
-      ListHeaderComponent={() => <View style={{height: 10}} />}
       contentContainerStyle={{
         paddingTop: HeaderHeight + TabBarHeight,
         paddingHorizontal: 10,
